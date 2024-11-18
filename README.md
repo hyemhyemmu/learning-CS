@@ -1,0 +1,1 @@
+Fighting for better life!
