@@ -60,7 +60,3 @@ def luhn_sum_double(n):
         return last_digit_doubled
     else:
         return luhn_sum_1(all_but_last) + last_digit_doubled
-
-
-temp = int(input())
-print(luhn_sum_1(temp), luhn_sum_2(temp))
