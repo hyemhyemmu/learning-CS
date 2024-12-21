@@ -100,3 +100,25 @@ def count_paths(t, total):
     else:
         found = 0
     return found + sum([count_paths(b, total - label(t)) for b in branches(t)])
+
+
+# Largest Label
+def largest_label(t):
+    """Return the largest label in tree t."""
+    if is_leaf(t):
+        return label(t)
+    else:
+        return max([largest_label(b) for b in branches(t)])
+
+
+# print largest label
+def above_root(t):
+    """Print all the labels of t that are larger than the root label."""
+
+    def process(b):
+        if label(b) > label(t):
+            print(label(b))
+        for b in branches(b):
+            process(b)
+
+    process(t)
