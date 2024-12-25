@@ -102,6 +102,7 @@ class Ant(Insect):
     implemented = False  # Only implemented Ant classes should be instantiated
     food_cost = 0
     is_container = False
+    blocks_path = True
 
     # ADD CLASS ATTRIBUTES HERE
 
@@ -526,16 +527,10 @@ class ScaryThrower(ThrowerAnt):
     # END Problem EC 2
     def throw_at(self, target):
         # BEGIN Problem EC 2
-        if not hasattr(target, 'scared'):
-            target.scared = 0  # initialize the value
-
-        if not target.scared:
-            target.scared += 1
-            target.scare()
-
-        if target.scared < 2:
-            target.scared += 1
-            target.scare()
+        # Only scare the bee if it has not been scared before
+        if target and not target.scared:
+            target.scared = True
+            target.scare(2)  # Make the bee scared for 2 turns
 
     # END Problem EC 2
 
@@ -546,16 +541,20 @@ class NinjaAnt(Ant):
     name = 'Ninja'
     damage = 1
     food_cost = 5
+    blocks_path = False
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem EC 3
-    implemented = False  # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
 
     # END Problem EC 3
+    def __init__(self, health = 1):
+        super().__init__(health)
 
     def action(self, gamestate):
         # BEGIN Problem EC 3
-        "*** YOUR CODE HERE ***"
-        # END Problem EC 3
+        for bee in self.place.bees[:]:
+            bee.reduce_health(self.damage)
+    # END Problem EC 3
 
 
 class LaserAnt(ThrowerAnt):
@@ -563,9 +562,13 @@ class LaserAnt(ThrowerAnt):
 
     name = 'Laser'
     food_cost = 10
+    damage = 2
+    damage_reduction_per_shot = 0.0625  # Damage reduction after each shot
+    distance_damage_reduction = 0.25  # Damage reduction per distance
+
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem EC 4
-    implemented = False  # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
 
     # END Problem EC 4
 
@@ -575,12 +578,22 @@ class LaserAnt(ThrowerAnt):
 
     def insects_in_front(self):
         # BEGIN Problem EC 4
-        return {}
+        insects = {}
+        distance = 0
+        current_place = self.place
+
+        while current_place and not current_place.is_hive:
+            for insect in current_place.bees and [current_place.ant]:  # bees are in a list while ant is single element
+                if insect is not self:
+                    insects[insect]: distance
+            current_place = current_place.entrance
+            distance += 1
         # END Problem EC 4
 
     def calculate_damage(self, distance):
         # BEGIN Problem EC 4
-        return 0
+        damage = self.damage - distance * self.distance_damage_reduction - self.insects_shot * self.damage_reduction_per_shot
+        return max(0, damage)  # ensure damage is not negative
         # END Problem EC 4
 
     def action(self, gamestate):
@@ -606,6 +619,8 @@ class Bee(Insect):
     def __init__(self, health):
         super().__init__(health)
         self.time_slowed = 0
+        self.scared_turns = 0
+        self.scared = False
 
     def sting(self, ant):
         """Attack an ANT, reducing its health by 1."""
@@ -620,7 +635,11 @@ class Bee(Insect):
         """Return True if this Bee cannot advance to the next Place."""
         # Special handling for NinjaAnt
         # BEGIN Problem EC 3
-        return self.place.ant is not None
+        # no ants or ants that doesn't block the road
+        if not self.place.ant or not self.place.ant.blocks_path:
+            return False
+        else:
+            return True
         # END Problem EC 3
 
     def action(self, gamestate):
@@ -629,16 +648,22 @@ class Bee(Insect):
 
         gamestate -- The GameState, used to access game state information.
         """
-        destination = self.place.exit
+        # If slowed and on an odd turn, skip the action
+        if self.time_slowed > 0 and gamestate.time % 2 == 1:
+            return  # Do nothing if slowed and on an odd turn
 
-        # If the bee is slowed and the current turn is odd, it doesn't move or act.
-        if hasattr(self, 'time_slowed') and self.time_slowed > 0 and gamestate.time % 2 == 1:
-            return  # Do nothing if the bee is slowed and it's an odd turn.
-
-        if self.blocked():
+        if self.scared_turns > 0:
+            # Attempt to move backwards if scared
+            previous_place = self.place.entrance
+            if previous_place and not previous_place.is_hive:
+                self.move_to(previous_place)
+            self.scared_turns -= 1
+        elif self.blocked():
+            # Attack if blocked
             self.sting(self.place.ant)
-        elif self.health > 0 and destination is not None:
-            self.move_to(destination)
+        elif self.health > 0 and self.place.exit is not None:
+            # Move forward if not blocked
+            self.move_to(self.place.exit)
 
     def add_to(self, place):
         place.bees.append(self)
@@ -654,7 +679,9 @@ class Bee(Insect):
         go backwards LENGTH times.
         """
         # BEGIN Problem EC 2
-        "*** YOUR CODE HERE ***"
+        if not self.scared:
+            self.scared = True
+            self.scared_turns = length
         # END Problem EC 2
 
 
