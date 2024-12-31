@@ -11,6 +11,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
 import src.ArrayDeque61B;
+import src.Deque61B;
+import src.LinkedListDeque61B;
 
 public class ArrayDeque61BTest {
 
@@ -136,25 +138,117 @@ public class ArrayDeque61BTest {
     }
 
     @Test
-    public void testRemoveFirstAndLastConsistency() {
+    public void testEdgeCases() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
 
+        // Remove from empty deque
+        assertThat(deque.removeFirst()).isNull();
+        assertThat(deque.removeLast()).isNull();
+
+        // Add and remove in sequence
+        deque.addFirst(1);
+        deque.addFirst(2);
+        deque.addFirst(3);
+
+        assertThat(deque.removeLast()).isEqualTo(1);
+        assertThat(deque.removeFirst()).isEqualTo(3);
+        assertThat(deque.size()).isEqualTo(1);
+
+        // Remove all
+        deque.removeFirst();
+        assertThat(deque.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testEqualDeques61B() {
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+        Deque61B<String> lld2 = new LinkedListDeque61B<>();
+
+        lld1.addLast("front");
+        lld1.addLast("middle");
+        lld1.addLast("back");
+
+        lld2.addLast("front");
+        lld2.addLast("middle");
+        lld2.addLast("back");
+
+        assertThat(lld1).isEqualTo(lld2);
+    }
+
+    @Test
+    public void test混合添加移除() {
+        ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
+        deque.addLast(1);
+        deque.addFirst(2);
+        deque.addLast(3);
+        deque.removeFirst();
+        deque.addFirst(4);
+        assertThat(deque.toList()).containsExactly(4, 1, 3);
+    }
+
+    @Test
+    public void testGetRecursive() {
+        ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
         deque.addLast(10);
         deque.addLast(20);
         deque.addLast(30);
+        assertThat(deque.getRecursive(0)).isEqualTo(10);
+        assertThat(deque.getRecursive(1)).isEqualTo(20);
+        assertThat(deque.getRecursive(2)).isEqualTo(30);
+        assertThat(deque.getRecursive(-1)).isNull();
+        assertThat(deque.getRecursive(3)).isNull();
+    }
 
-        // Remove first and then last
-        Integer removedFirst = deque.removeFirst(); // Should be 10
-        Integer removedLast = deque.removeLast(); // Should be 30
+    @Test
+    public void testEqualsWithNull() {
+        ArrayDeque61B<Object> deque1 = new ArrayDeque61B<>();
+        deque1.addLast(null);
+        deque1.addLast("a");
 
-        assertThat(removedFirst).isEqualTo(10);
-        assertThat(removedLast).isEqualTo(30);
+        ArrayDeque61B<Object> deque2 = new ArrayDeque61B<>();
+        deque2.addLast("a");
+        deque2.addFirst(null);
 
-        // Ensure the size decreases by 2
+        assertThat(deque1.equals(deque2)).isTrue();
+    }
+
+    @Test
+    public void testEqualsDifferentTypes() {
+        ArrayDeque61B<String> deque1 = new ArrayDeque61B<>();
+        deque1.addLast("a");
+
+        LinkedListDeque61B<String> deque2 = new LinkedListDeque61B<>();
+        deque2.addLast("a");
+
+        assertThat(deque1.equals(deque2)).isFalse();
+    }
+
+    @Test
+    public void testExtremeSize() {
+        ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
+        int maxSize = 1000000;
+        for (int i = 0; i < maxSize; i++) {
+            deque.addLast(i);
+        }
+        assertThat(deque.size()).isEqualTo(maxSize);
+        assertThat(deque.removeFirst()).isEqualTo(0);
+        assertThat(deque.size()).isEqualTo(maxSize - 1);
+        assertThat(deque.removeLast()).isEqualTo(maxSize - 1);
+        assertThat(deque.size()).isEqualTo(maxSize - 2);
+    }
+
+    @Test
+    public void test边界条件() {
+        ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
+        assertThat(deque.isEmpty()).isTrue();
+        assertThat(deque.size()).isEqualTo(0);
+        assertThat(deque.removeFirst()).isNull();
+        assertThat(deque.removeLast()).isNull();
+        deque.addFirst(1);
         assertThat(deque.size()).isEqualTo(1);
-
-        // Ensure the new first (and last) is correct
-        assertThat(deque.get(0)).isEqualTo(20);
+        assertThat(deque.get(0)).isEqualTo(1);
+        deque.removeFirst();
+        assertThat(deque.isEmpty()).isTrue();
     }
 
 
