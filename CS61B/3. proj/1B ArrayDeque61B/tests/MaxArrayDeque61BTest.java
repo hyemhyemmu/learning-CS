@@ -1,4 +1,7 @@
+package tests;
+
 import org.junit.jupiter.api.*;
+import src.MaxArrayDeque61B;
 
 import java.util.Comparator;
 
@@ -11,13 +14,13 @@ public class MaxArrayDeque61BTest {
             return a.length() - b.length();
         }
     }
-//    @Test
-//    public void basicTest() {
-//        MaxArrayDeque61B<String> mad = new MaxArrayDeque61B<>(new StringLengthComparator());
-//        mad.addFirst("");
-//        mad.addFirst("2");
-//        mad.addFirst("fury road");
-//        assertThat(mad.max()).isEqualTo("fury road");
-//    }
+    @Test
+    public void basicTest() {
+        MaxArrayDeque61B<String> mad = new MaxArrayDeque61B<>(new StringLengthComparator());
+        mad.addFirst("");
+        mad.addFirst("2");
+        mad.addFirst("fury road");
+        assertThat(mad.max()).isEqualTo("fury road");
+    }
     
 }
