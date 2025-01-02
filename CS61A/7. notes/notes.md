@@ -1,10 +1,4 @@
-# 笔记
-
-Status: Not Started
-Project: CS (https://www.notion.so/CS-13eb34e8f75180fcb91bfe0b305925a7?pvs=21)
-母任务: 2. UCB: CS61A Structure and Interpretation of Computer Pograms (https://www.notion.so/2-UCB-CS61A-Structure-and-Interpretation-of-Computer-Pograms-13eb34e8f7518029b283f1383b9d3ef1?pvs=21)
-
-CS61A 2024Fall UC berkeley 
+ UC berkeley - CS61A - 2024Fall - Structure and Interpretation of Computer Programs
 
 ## High-Order Functions 高阶函数
 
