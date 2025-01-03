@@ -1,5 +1,7 @@
-import ngrams.NGramMap;
-import ngrams.TimeSeries;
+package tests;
+
+import src.ngrams.NGramMap;
+import src.ngrams.TimeSeries;
 
 import org.junit.jupiter.api.Test;
 

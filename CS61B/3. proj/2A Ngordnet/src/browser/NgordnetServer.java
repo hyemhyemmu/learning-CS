@@ -1,4 +1,4 @@
-package browser;
+package src.browser;
 
 import static spark.Spark.*;
 

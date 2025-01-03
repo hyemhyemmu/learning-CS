@@ -1,8 +1,8 @@
-package main;
+package src.main;
 
-import ngrams.NGramMap;
-import ngrams.TimeSeries;
-import plotting.Plotter;
+import src.ngrams.NGramMap;
+import src.ngrams.TimeSeries;
+import src.plotting.Plotter;
 import org.knowm.xchart.XYChart;
 
 import static utils.Utils.*;

@@ -1,4 +1,4 @@
-package browser;
+package src.browser;
 
 import com.google.gson.Gson;
 import spark.QueryParamsMap;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class NgordnetQueryHandler implements Route {
-    public abstract String handle(browser.NgordnetQuery q);
+    public abstract String handle(src.browser.NgordnetQuery q);
     private static final Gson gson = new Gson();
 
     private static List<String> commaSeparatedStringToList(String s) {
@@ -21,7 +21,7 @@ public abstract class NgordnetQueryHandler implements Route {
         return Arrays.asList(requestedWords);
     }
 
-    private static browser.NgordnetQuery readQueryMap(QueryParamsMap qm) {
+    private static src.browser.NgordnetQuery readQueryMap(QueryParamsMap qm) {
         List<String> words = commaSeparatedStringToList(qm.get("words").value());
 
         int startYear;
@@ -46,7 +46,7 @@ public abstract class NgordnetQueryHandler implements Route {
             k = 0;
         }
 
-        return new browser.NgordnetQuery(words, startYear, endYear, k);
+        return new src.browser.NgordnetQuery(words, startYear, endYear, k);
     }
 
     @Override

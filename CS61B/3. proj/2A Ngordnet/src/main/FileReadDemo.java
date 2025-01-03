@@ -1,4 +1,4 @@
-package main;
+package src.main;
 
 import edu.princeton.cs.algs4.In;
 

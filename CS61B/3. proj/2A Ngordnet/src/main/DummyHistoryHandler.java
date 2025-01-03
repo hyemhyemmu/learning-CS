@@ -1,9 +1,9 @@
-package main;
+package src.main;
 
-import browser.NgordnetQuery;
-import browser.NgordnetQueryHandler;
-import ngrams.TimeSeries;
-import plotting.Plotter;
+import src.browser.NgordnetQuery;
+import src.browser.NgordnetQueryHandler;
+import src.ngrams.TimeSeries;
+import src.plotting.Plotter;
 import org.knowm.xchart.XYChart;
 
 import java.util.ArrayList;

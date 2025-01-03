@@ -1,6 +1,6 @@
-package plotting;
+package src.plotting;
 
-import ngrams.TimeSeries;
+import src.ngrams.TimeSeries;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;

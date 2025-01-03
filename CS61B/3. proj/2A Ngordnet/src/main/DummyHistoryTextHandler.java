@@ -1,7 +1,5 @@
-package main;
-
-import browser.NgordnetQuery;
-import browser.NgordnetQueryHandler;
+package src.main;
+import src.browser.*;
 
 import java.util.List;
 

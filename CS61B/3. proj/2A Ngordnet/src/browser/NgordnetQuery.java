@@ -1,4 +1,4 @@
-package browser;
+package src.browser;
 
 import java.util.List;
 

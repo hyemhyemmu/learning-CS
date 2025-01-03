@@ -1,10 +1,8 @@
-package main;
+package src.main;
 
 import static utils.Utils.*;
-
 import org.slf4j.LoggerFactory;
-
-import browser.NgordnetServer;
+import src.browser.NgordnetServer;
 
 public class Main {
     static {
