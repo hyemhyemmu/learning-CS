@@ -58,6 +58,9 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
+        if (!wordHistories.containsKey(word)) {
+            return new TimeSeries();
+        }
         return subTimeSeries(word, MIN_YEAR, MAX_YEAR);
 
     }
@@ -67,12 +70,8 @@ public class NGramMap {
      */
     public TimeSeries totalCountHistory() {
         TimeSeries total = new TimeSeries();
-        for (String word : wordHistories.keySet()) {
-            TimeSeries wordSeries = wordHistories.get(word);
-            for (int year : wordSeries.keySet()) {
-                double wordCountInAYear = wordSeries.get(year);
-                total.put(year, total.getOrDefault(year, 0.0) + wordCountInAYear);
-            }
+        for (int year : totalWordCounts.keySet()) {
+            total.put(year, totalWordCounts.get(year)); // 逐项复制
         }
         return total;
     }
@@ -107,18 +106,19 @@ public class NGramMap {
      * ENDYEAR, inclusive of both ends. If a word does not exist in this time frame, ignore it
      * rather than throwing an exception.
      */
-    public TimeSeries summedWeightHistory(Collection<String> words,
-                                          int startYear, int endYear) {
-        validateYearRange(startYear,endYear);
+    public TimeSeries summedWeightHistory(Collection<String> words, int startYear, int endYear) {
+        validateYearRange(startYear, endYear);
         TimeSeries result = new TimeSeries();
+
         for (String word : words) {
             TimeSeries wordFrequency = weightHistory(word, startYear, endYear);
-            if (wordFrequency.isEmpty())
-                continue;
-            for (int year : wordFrequency.keySet()) {
-                result.put(year, result.getOrDefault(year, 0.0) + wordFrequency.get(year));
+            for (int year = startYear; year <= endYear; year++) {
+                double existingValue = result.getOrDefault(year, 0.0);
+                double newValue = wordFrequency.getOrDefault(year, 0.0);
+                result.put(year, existingValue + newValue);
             }
         }
+
         return result;
     }
 
@@ -181,15 +181,17 @@ public class NGramMap {
 
     private TimeSeries wordFrequency(String word, int startYear, int endYear) {
         TimeSeries wordSeries = countHistory(word, startYear, endYear);
-        TimeSeries totalSeries = (TimeSeries) totalCountHistory().subMap(startYear, true, endYear, true);
         TimeSeries result = new TimeSeries();
 
-        for (int year : totalSeries.keySet()) {
-            Double wordCount = wordSeries.getOrDefault(year, 0.0);
-            result.put(year, wordCount / totalSeries.get(year));
+        for (int year = startYear; year <= endYear; year++) {
+            double wordCount = wordSeries.getOrDefault(year, 0.0);
+            double totalCount = totalWordCounts.getOrDefault(year, 1.0); // 避免除以零
+            result.put(year, wordCount / totalCount);
         }
+
         return result;
     }
+
 
     private void validateYearRange(int startYear, int endYear) {
         if (startYear > endYear) {
