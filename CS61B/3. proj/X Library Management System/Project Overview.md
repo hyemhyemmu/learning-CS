@@ -1,5 +1,3 @@
-# 无标题
-
 Project Background:
 
 A library management system that handles functions such as storing, borrowing, returning, and searching books. The system needs to efficiently manage a large number of books and support multiple search methods.
