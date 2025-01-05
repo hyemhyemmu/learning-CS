@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,8 +14,8 @@ public class User {
     public User(String userId, String name) {
         this.userId = userId;
         this.name = name;
-        currentBorrows = new ArrayList<>();
-        borrowHistory = new ArrayList<>();
+        currentBorrows = new LinkedList<>();
+        borrowHistory = new LinkedList<>();
         borrowedBookNum = 0;
     }
 

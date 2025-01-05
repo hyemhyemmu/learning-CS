@@ -193,7 +193,7 @@ public class BinarySearchLibrary<K extends Comparable<K>, V extends Book> implem
         collectBooks(root, allBooks);
         allBooks.sort((v1,v2)->{
             if (v1 != null && v2 != null){
-                return (((Book)v1).getBorrowCount()-((Book)v2).getBorrowCount());
+                return (((Book)v2).getBorrowCount()-((Book)v1).getBorrowCount());
             }
             return 0;
         });

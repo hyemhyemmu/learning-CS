@@ -21,8 +21,9 @@ public class Library<K, V> implements LibraryMap {
             throw new IllegalArgumentException("The book already exist!");
         bookDatabase.put(isbn, book);
         String category = book.getCategory();
-        int categoryTotal = categoryStats.getOrDefault(isbn, 0);
+        int categoryTotal = categoryStats.getOrDefault(category, 0);
         categoryTotal++;
+        categoryStats.put(category, categoryTotal);
         System.out.printf("%s added successfully!\n", book.getTitle());
     }
 
@@ -30,8 +31,10 @@ public class Library<K, V> implements LibraryMap {
     public void removeBook(String isbn, Book book) {
         if (!bookDatabase.containsKey(isbn)) throw new IllegalArgumentException("This book does not exist!");
         bookDatabase.remove(isbn);
-        int categoryTotal = categoryStats.get(isbn);
+        String category = book.getCategory();
+        int categoryTotal = categoryStats.get(category);
         categoryTotal--;
+        categoryStats.put(category, categoryTotal);
         System.out.printf("%s removed successfully!\n", book.getTitle());
     }
 
