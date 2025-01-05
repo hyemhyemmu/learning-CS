@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.function.Predicate;
 
-public class BinarySearchLibrary<K extends Comparable<K>, V extends Book> implements LibraryMap<K, V> {
+public class BinarySearchLibrary<K extends Comparable<K>, V extends Book> implements BSLibraryMap<K, V> {
     private Node root;
     private int size;
 
@@ -208,39 +208,6 @@ public class BinarySearchLibrary<K extends Comparable<K>, V extends Book> implem
         collectBooks(node.right,allBooks);
     }
 
-    /**
-     * return true if borrow successfully,false if not
-     */
-    @Override
-    public boolean borrowBook(String isbn, String userId) {
-        //TODO: 处理与借阅记录有关的内容
-        Book book = (Book) get((K) isbn);
-        if (book.isAvailable() && book != null) {
-            book.setAvailable(false);
-            book.incrementBorrowCount();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean returnBook(String isbn, String userId) {
-        Book book = (Book) get((K) isbn);
-        if (!book.isAvailable() && book != null) {
-            book.setAvailable(true);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean renewBook(String isbn, String userId) {
-        Book book = (Book) get((K) isbn);
-        if (book != null && !book.isAvailable()) {
-            //TODO:找到读者之后配合record一起续借
-        }
-        return false;
-    }
 
     @Override
     public Iterator<K> iterator() {

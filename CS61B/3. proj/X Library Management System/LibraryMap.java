@@ -1,28 +1,32 @@
-import java.util.Set;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public interface LibraryMap<K, V> extends Iterable<K> {
-    // 基本操作
-    void put(K key, V value);
-    V get(K key);
-    boolean containsKey(K key);
-    int size();
-    void clear();
-    Set<K> keySet();
-    V remove(K key);
+public interface LibraryMap {
+    //basic functions
+    public void addBook(String isbn, Book book);
+    public void removeBook(String isbn, Book book);
+    public void addUser(String name);
+    public void removeUser(String userId);
 
+    //borrow related functions
+    public BorrowRecord borrowBook(String userId, String isbn);
+    public void returnBook(String userId, String isbn);
+    public void renewBook(String userId, String isbn);
 
+    //search functions
+    public Set<Book> searchBooks(String query, String searchType);
+    public List getPopularBooks(int k);
+    public List<BorrowRecord> getOverdueBooks();
+    public List<BorrowRecord> getUserBorrowHistory(String userId);
 
-    // 图书查询操作
-    Set<V> searchByISBN(String isbn);
-    Set<V> searchByCategory(String category);
-    Set<V> searchByAuthor(String author);
-    Set<V> searchByTitle(String titlePart);
-    Set<V> searchCombined(String author, String category);
-    List<V> getTopBorrowed(int k);  // 获取借阅次数最多的k本书
+    //data methods
+    public Map<String, Integer> getCategoryStatistics();
+    public Map<String, Integer> getAvailabilityStatistics();
 
-    // 借阅相关操作
-    boolean borrowBook(String isbn, String userId);
-    boolean returnBook(String isbn, String userId);
-    boolean renewBook(String isbn, String userId);
+    //helper methods
+    public Book getBook(String isbn);
+    public User getUser(String userId);
+    public int getTotalBooks();
+    public int getTotalUsers();
 }

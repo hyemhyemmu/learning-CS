@@ -24,9 +24,8 @@ public class User {
     }
 
     //add a new borrow record to user's account
-    public void addBorrowRecord(String isbn) {
-        BorrowRecord newRecord = new BorrowRecord(isbn, userId);
-        currentBorrows.add(newRecord);
+    public void addBorrowRecord(BorrowRecord record) {
+        currentBorrows.add(record);
     }
 
     public void returnBook(String isbn) {
@@ -35,6 +34,7 @@ public class User {
         for (BorrowRecord record : currentBorrows) {
             if (record.getIsbn().equals(isbn)) {
                 currentBorrows.remove(record);
+                borrowHistory.add(record);
                 returned = true;
             }
         }
@@ -42,20 +42,46 @@ public class User {
             throw new IllegalStateException("No such book exists!");
     }
 
-    //TODO:需要完成一个追踪结束数量的函数和变量
+
 
     @Override
     public String toString() {
         return String.format("User{userId='%s',name='%s',currentBorrows=%d}", userId, name, borrowedBookNum);
     }
 
-    public String getUserName() {
-        return name;
-    }
 
     public String getUserId() {
         return userId;
     }
+
+    public boolean isCurrentBorrowsEmpty(){
+        return currentBorrows.isEmpty();
+    }
+
+
+    public boolean hasBorrowed(String isbn){
+        for (BorrowRecord record :currentBorrows){
+            if (record.getIsbn().equals(isbn))
+                return true;
+        }
+        return false;
+    }
+
+    public BorrowRecord getBorrowRecord(String isbn){
+        for (BorrowRecord record:currentBorrows){
+            if (record.getIsbn().equals(isbn))
+                return record;
+        }
+        return null;
+    }
+
+    public List<BorrowRecord> getBorrowRecord(){
+        return currentBorrows;
+    }
+    public List<BorrowRecord> getBorrowHistory(){
+        return borrowHistory;
+    }
+
 
     @Override
     public int hashCode() {
