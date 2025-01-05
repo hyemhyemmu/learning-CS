@@ -1,34 +1,38 @@
-Project Background:  
+# 无标题
+
+Project Background:
+
 A library management system that handles functions such as storing, borrowing, returning, and searching books. The system needs to efficiently manage a large number of books and support multiple search methods.
 
-Main Features:  
-1. Book Information Storage and Management (using BST)  
-2. User Information Management (using Hash Tables)  
-3. Borrowing Record Tracking (using Doubly Linked List)  
-4. Popular Book Ranking (using Heap)  
+Main Features:
+
+1. Book Information Storage and Management (using BST)
+2. User Information Management (using Hash Tables)
+3. Borrowing Record Tracking (using Doubly Linked List)
+4. Popular Book Ranking (using Heap)
 5. Category Management (using Red-Black Tree)
 
-A. Book Search Function:  
-- Search by ISBN (Exact match)  
-- Search by Book Title (Partial match supported, e.g., "Harry" can match "Harry Potter")  
-- Search by Author (Partial match supported)  
-- Search by Category (Exact match)  
+A. Book Search Function:
+
+- Search by ISBN (Exact match)
+- Search by Book Title (Partial match supported, e.g., "Harry" can match "Harry Potter")
+- Search by Author (Partial match supported)
+- Search by Category (Exact match)
 - Support for combined queries (e.g., searching by both Author and Category)
 
-B. Borrowing Function:  
-- Users can borrow up to 5 books at a time  
-- Borrowing period is 30 days  
-- Borrowing history needs to be recorded  
+B. Borrowing Function:
+
+- Users can borrow up to 5 books at a time
+- Borrowing period is 30 days
+- Borrowing history needs to be recorded
 - Support for renewal (up to one renewal)
 
-C. Statistical Function:  
-- Track the most popular books (based on borrowing frequency)  
-- Query users' borrowing history  
-- Track currently borrowed books  
+C. Statistical Function:
+
+- Track the most popular books (based on borrowing frequency)
+- Query users' borrowing history
+- Track currently borrowed books
 - Count books by category
-
-
-
 
 项目背景:
 一个图书馆管理系统，能处理图书的字储、借阅、归还、搜索等功能。系统需要能够高效地管理大量图书，并支持多种搜索方式
