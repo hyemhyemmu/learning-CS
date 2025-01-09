@@ -1,5 +1,5 @@
 import java.util.Arrays;
-
+import java.util.Random;
 public class QuickSort {
 
     public static void main(String[] args) {
@@ -21,6 +21,11 @@ public class QuickSort {
     }
 
     private static int partition(int[] arr, int low, int high) {
+        //randomly choose pivot to avoid worst case
+        Random rand = new Random();
+        int randomIndex = low + rand.nextInt(high - low + 1); //reminder: can't use arr.length here, since we are not processing the whole array
+        swap(arr, low, randomIndex);
+
         int pivot = arr[low];
         int i = low + 1;//start searching from left, finding those larger than pivot
         int j = high; //start searching from right, finding those smaller than pivot
