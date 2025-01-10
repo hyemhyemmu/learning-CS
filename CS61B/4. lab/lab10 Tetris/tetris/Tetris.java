@@ -5,12 +5,13 @@ import tileengine.TETile;
 import tileengine.TERenderer;
 import tileengine.Tileset;
 
+import java.awt.*;
 import java.util.*;
 
 /**
- *  Provides the logic for Tetris.
+ * Provides the logic for Tetris.
  *
- *  @author Erik Nelson, Omar Yu, Noah Adhikari, Jasmine Lin
+ * @author Erik Nelson, Omar Yu, Noah Adhikari, Jasmine Lin
  */
 
 public class Tetris {
@@ -39,6 +40,7 @@ public class Tetris {
 
     /**
      * Checks for if the game is over based on the isGameOver parameter.
+     *
      * @return boolean representing whether the game is over or not
      */
     private boolean isGameOver() {
@@ -67,13 +69,26 @@ public class Tetris {
      */
     private void spawnPiece() {
         // The game ends if this tile is filled
-        if (board[4][19] != Tileset.NOTHING) {
+        if (!canSpawn()) {
             isGameOver = true;
         }
 
         // Otherwise, spawn a new piece and set its position to the spawn point
         currentTetromino = Tetromino.values()[bagRandom.getValue()];
         currentTetromino.reset();
+    }
+
+    private boolean canSpawn() {
+        Tetromino t = Tetromino.I; // 选择一个基准Tetromino
+        for (int x = 0; x < t.width; x++) {
+            for (int y = 0; y < t.height; y++) {
+                // 检查生成位置是否被占用
+                if (t.shape[x][y] && auxiliary[t.pos.x + x][t.pos.y + y] != Tileset.NOTHING) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -90,9 +105,26 @@ public class Tetris {
             return;
         }
 
-        // TODO: Implement interactivity, so the user is able to input the keystrokes to move
-        //  the tile and rotate the tile. You'll want to use some provided helper methods here.
+        while (StdDraw.hasNextKeyTyped()) {
+            char key = StdDraw.nextKeyTyped();
+            //left
+            if (key == 'a' && movement.canMove(-1, 0)) {
+                movement.tryMove(-1, 0);
+            }
+            //right
+            else if (key == 'd' && movement.canMove(1, 0)) {
+                movement.tryMove(1, 0);
+            }
+            //left rotate
+            else if (key == 'q') {
+                movement.rotate(Movement.Rotation.LEFT);
+            }
+            //right rotate
+            else if (key == 'w') {
+                movement.rotate(Movement.Rotation.RIGHT);
+            }
 
+        }
 
         Tetromino.draw(t, board, t.pos.x, t.pos.y);
     }
@@ -103,24 +135,68 @@ public class Tetris {
      * @param linesCleared
      */
     private void incrementScore(int linesCleared) {
-        // TODO: Increment the score based on the number of lines cleared.
+        switch (linesCleared) {
+            case 1:
+                score += 100;
+                break;
+            case 2:
+                score += 300;
+                break;
+            case 3:
+                score += 500;
+                break;
+            case 4:
+                score += 800;
+                break;
+            default:
+                break;
+        }
 
     }
 
     /**
      * Clears lines/rows on the provided tiles/board that are horizontally filled.
      * Repeats this process for cascading effects and updates score accordingly.
+     *
      * @param tiles
      */
     public void clearLines(TETile[][] tiles) {
-        // Keeps track of the current number lines cleared
         int linesCleared = 0;
+        int targetRow = HEIGHT - 1;
 
-        // TODO: Check how many lines have been completed and clear it the rows if completed.
+        // 从底部开始检查每一行
+        for (int y = HEIGHT - 1; y >= 0; y--) {
+            if (!isFullRow(tiles,y)) {
+                // 将当前行复制到目标行
+                for (int x = 0; x < WIDTH; x++) {
+                    tiles[x][targetRow] = tiles[x][y];
+                }
+                targetRow--;
+            } else {
+                // 填满的行，增加清除行计数
+                linesCleared++;
+            }
+        }
 
-        // TODO: Increment the score based on the number of lines cleared.
+        // 将顶部的行设置为空行
+        for (int y = 0; y <= targetRow; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                tiles[x][y] = Tileset.NOTHING;
+            }
+        }
 
+        // 增加分数并更新辅助板子
+        incrementScore(linesCleared);
         fillAux();
+    }
+
+    private boolean isFullRow(TETile[][] tiles,int y) {
+        for (int x = 0; x < WIDTH; x++) {
+            if (tiles[x][y] == Tileset.NOTHING) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -129,23 +205,31 @@ public class Tetris {
      */
     public void runGame() {
         resetActionTimer();
-
-        // TODO: Set up your game loop. The game should keep running until the game is over.
-        // Use helper methods inside your game loop, according to the spec description.
-
-
+        TETile[][] tiles=getBoard();
+        while (!isGameOver()){
+            spawnPiece();
+            if (movement.canMove(0,-1)){
+                movement.dropDown();
+            }
+            updateBoard();
+            renderBoard();
+            clearLines(tiles);
+            renderBoard();
+        }
     }
 
     /**
      * Renders the score using the StdDraw library.
      */
     private void renderScore() {
-        // TODO: Use the StdDraw library to draw out the score.
-
+        StdDraw.setFont();
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(7,19,"Score:"+score);
     }
 
     /**
      * Use this method to run Tetris.
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -202,6 +286,7 @@ public class Tetris {
 
     /**
      * Returns the current game board.
+     *
      * @return
      */
     public TETile[][] getBoard() {
@@ -217,6 +302,7 @@ public class Tetris {
 
     /**
      * Returns the current auxiliary board.
+     *
      * @return
      */
     public TETile[][] getAuxiliary() {
@@ -226,6 +312,7 @@ public class Tetris {
 
     /**
      * Returns the current Tetromino/piece.
+     *
      * @return
      */
     public Tetromino getCurrentTetromino() {
@@ -234,6 +321,7 @@ public class Tetris {
 
     /**
      * Sets the current Tetromino to null.
+     *
      * @return
      */
     public void setCurrentTetromino() {
@@ -249,6 +337,7 @@ public class Tetris {
 
     /**
      * Fills the entire board with the specific tile that is passed in.
+     *
      * @param tile
      */
     private void fillBoard(TETile tile) {
@@ -262,6 +351,7 @@ public class Tetris {
     /**
      * Copies the contents of the src array into the dest array using
      * System.arraycopy.
+     *
      * @param src
      * @param dest
      */
@@ -287,6 +377,7 @@ public class Tetris {
 
     /**
      * Calculates the delta time with the previous action.
+     *
      * @return the amount of time between the previous Tetromino movement with the present
      */
     private long actionDeltaTime() {
