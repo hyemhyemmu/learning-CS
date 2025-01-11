@@ -1,5 +1,6 @@
 package core;
 
+import java.io.Serializable;
 import java.lang.Math;
 
 import tileengine.TETile;
@@ -7,19 +8,22 @@ import tileengine.Tileset;
 
 import java.util.*;
 
-public class World {
+public class World implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final int ROOM_NUM = 12;
     private static final int MIN_SIZE = 5;
     private static final int MAX_SIZE = 17;
     private static final int MAX_ATTEMPTS = 1000;
     private final Random r;
-    public TETile[][] world;
+    public transient TETile[][] world;
     private final long seed;
     private int roomNum;
     private final int width;
     private final int height;
     public List<Room> roomList;
     private Set<Point> hallwayPoints;
+    private SerializableTile[][] serializedWorld;
+
 
 
     public World(long seed, int width, int height) {
@@ -259,6 +263,37 @@ public class World {
         Point(int x, int y) {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    public long getSeed() {
+        return seed;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+        serializedWorld = new SerializableTile[world.length][world[0].length];
+        for (int x = 0; x < world.length; x++) {
+            for (int y = 0; y < world[0].length; y++) {
+                if (world[x][y] != null) {
+                    serializedWorld[x][y] = new SerializableTile(world[x][y]);
+                }
+            }
+        }
+
+        out.defaultWriteObject();
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject(); // 读取非transient字段
+
+        // 将SerializableTile数组转换回TETile数组
+        world = new TETile[serializedWorld.length][serializedWorld[0].length];
+        for (int x = 0; x < serializedWorld.length; x++) {
+            for (int y = 0; y < serializedWorld[0].length; y++) {
+                if (serializedWorld[x][y] != null) {
+                    world[x][y] = serializedWorld[x][y].toTETile();
+                }
+            }
         }
     }
 }

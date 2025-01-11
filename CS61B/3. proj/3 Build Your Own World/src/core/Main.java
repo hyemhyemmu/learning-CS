@@ -1,22 +1,30 @@
 package core;
 
+import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TERenderer;
 import tileengine.TETile;
 
 public class Main {
-    private static final int WIDTH = 70;
-    private static final int HEIGHT = 50;
 
     public static void main(String[] args) {
-        //initialize render
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
+        Game game = new Game();
 
-        World newWorld=new World(6578897764558030356L,WIDTH,HEIGHT);
-        TETile[][] world=newWorld.world;
+        // Set up StdDraw for input handling
+        StdDraw.enableDoubleBuffering();
 
-        //render world
-        ter.renderFrame(world);
+        // Start game loop
+        game.start();
+
+        // interactive module
+        //but apparently that there is multiple cases
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                game.handleKeyPress(key);
+            }
+            StdDraw.pause(10);
+        }
+
 
 
     }

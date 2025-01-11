@@ -14,11 +14,11 @@ public class Room {
     }
 
     /**
-     * check if this room intersects with another room
+     * check if this room intersectsWithBuffer with another room
      */
-    public boolean intersects(Room other) {
-        return !(x + width + 1 < other.x || other.x + other.width + 1 < x ||
-                y + height + 1 < other.y || other.y + other.height + 1 < y);
+    public boolean intersectsWithBuffer(Room other,int buffer) {
+        return !(x + width + buffer < other.x || other.x + other.width + buffer < x ||
+                y + height + buffer < other.y || other.y + other.height + buffer < y);
     }
 
     // Getters
