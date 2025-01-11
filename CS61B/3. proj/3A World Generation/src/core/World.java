@@ -2,25 +2,24 @@ package core;
 
 import java.lang.Math;
 
-import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class World {
-    private static final int ROOM_NUM = 8;
-    private static final int MIN_SIZE = 8;
-    private static final int MAX_SIZE = 20;
+    private static final int ROOM_NUM = 12;
+    private static final int MIN_SIZE = 5;
+    private static final int MAX_SIZE = 17;
+    private static final int MAX_ATTEMPTS = 1000;
     private final Random r;
     public TETile[][] world;
     private final long seed;
     private int roomNum;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     public List<Room> roomList;
+    private Set<Point> hallwayPoints;
 
 
     public World(long seed, int width, int height) {
@@ -29,8 +28,8 @@ public class World {
         this.width = width;
         this.height = height;
         roomList = new LinkedList<>();
-        roomNum=0;
-        initializeWorld();
+        hallwayPoints=new HashSet<>();
+        roomNum = 0;
         generateWorld();
     }
 
@@ -46,18 +45,21 @@ public class World {
 
 
     /**
-     * generate the whole world
+     * generate the whole world, regenerate if does not match requirements
      */
     public void generateWorld() {
-        generateRooms();
-        connectRooms();
-        addWalls();
-
+            initializeWorld();
+            generateRooms();
+            connectRooms();
+            addWalls();
     }
+
 
     private void generateRooms() {
         int attempts = 0;
-        while (roomNum < ROOM_NUM && attempts < 1000) {
+        //when use random, it is always helpful to have a "attempt",
+        // in case that program gone into dead loop
+        while (roomNum < ROOM_NUM && attempts < MAX_ATTEMPTS) {
             Room room = generateRandomRoom();
             if (isValidRoom(room)) {
                 addRoom(room);
@@ -69,20 +71,22 @@ public class World {
 
     }
 
+
     private boolean isValidRoom(Room room) {
         //intersect with others
         for (Room otherRooms : roomList) {
-            if (room.intersects(otherRooms))
+            if (room.intersectsWithBuffer(otherRooms, 2))
                 return false;
         }
+
         return true;
     }
 
     private Room generateRandomRoom() {
         int roomWidth = r.nextInt(MIN_SIZE, MAX_SIZE);
         int roomHeight = r.nextInt(MIN_SIZE, MAX_SIZE);
-        int x = r.nextInt(0, width - roomWidth); //make sure it is in bound
-        int y = r.nextInt(0, height - roomHeight);
+        int x = r.nextInt(1, width - roomWidth - 2);
+        int y = r.nextInt(1, height - roomHeight - 2);
 
         return new Room(x, y, roomWidth, roomHeight);
     }
@@ -96,41 +100,66 @@ public class World {
     }
 
     private void connectRooms() {
-        for (int i = 0; i < roomList.size() - 1; i++) {
-            Room room1 = roomList.get(i);
-            Room room2 = roomList.get(i + 1);
-            connect(room1, room2);
+        //user Kruskal's for help
+        UnionFind uf = new UnionFind(roomList.size());
+        PriorityQueue<Edge> edges = new PriorityQueue<>();
+
+        for (int i = 0; i < roomList.size(); i++) {
+            for (int j = i + 1; j < roomList.size(); j++) {
+                Room r1 = roomList.get(i);
+                Room r2 = roomList.get(j);
+                int dist = Math.abs(r1.getCenterX() - r2.getCenterX()) +
+                        Math.abs(r1.getCenterY() - r2.getCenterY());
+                edges.offer(new Edge(i, j, dist));
+            }
+        }
+
+        //Kruskal's
+        while (!edges.isEmpty()) {
+            Edge edge = edges.poll();
+
+            //if not connected yet
+            if (!uf.isConnected(edge.from, edge.to)) {
+                connectWithTurns(roomList.get(edge.from), roomList.get(edge.to));
+                uf.connect(edge.from, edge.to);
+            }
         }
     }
 
-    private void connect(Room room1, Room room2) {
+    private void connectWithTurns(Room room1, Room room2) {
         int x1 = room1.getCenterX();
         int y1 = room1.getCenterY();
         int x2 = room2.getCenterX();
         int y2 = room2.getCenterY();
 
-        //decide whether horizontal first or vertical first
-        switch (r.nextInt(2)) {
-            case 0:
-                createHorizonHall(x1, x2, y1);
-                createVerticalHall(y1, y2, x1);
-                break;
-            case 1:
-                createVerticalHall(y1, y2, x1);
-                createHorizonHall(x1, x2, y1);
-                break;
+        // randomly choose turning point
+        int turnX = x1;
+        int turnY = y2;
+
+        if (r.nextBoolean()) {
+            turnX = x2;
+            turnY = y1;
         }
+
+        // create hallway
+        createHallway(x1, y1, turnX, turnY);
+        createHallway(turnX, turnY, x2, y2);
     }
 
-    private void createVerticalHall(int y1, int y2, int x) {
-        for (int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
-            world[x][y] = Tileset.FLOOR;
-        }
-    }
+    private void createHallway(int x1, int y1, int x2, int y2) {
+        int minX = Math.min(x1, x2);
+        int maxX = Math.max(x1, x2);
+        int minY = Math.min(y1, y2);
+        int maxY = Math.max(y1, y2);
 
-    private void createHorizonHall(int x1, int x2, int y) {
-        for (int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
-            world[x][y] = Tileset.FLOOR;
+        // create while recording hall positions
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                if (world[x][y] != Tileset.FLOOR) {
+                    world[x][y] = Tileset.FLOOR;
+                    hallwayPoints.add(new Point(x, y));
+                }
+            }
         }
     }
 
@@ -159,7 +188,77 @@ public class World {
                 }
             }
         }
+    }
+
+    //UnionFind
+    private static class UnionFind {
+        private int[] parent;
+
+        public UnionFind(int n) {
+            parent = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = -1;
+            }
+        }
+
+        public int find(int n) {
+            int root = n;
+            while (parent[root] >= 0) {
+                root = parent[root];
+            }
+
+            //compression
+            while (n != root) {
+                int temp = parent[n];
+                parent[n] = root;
+                n = temp;
+            }
+            return root;
+        }
+
+        public void connect(int p, int q) {
+            int i = find(p);
+            int j = find(q);
+
+            if (i == j)
+                return;
+
+            //connect the smaller tree to the larger one
+            if (parent[i] < parent[j]) { // i's tree is larger
+                parent[i] += parent[j];
+                parent[j] = i;
+            } else {
+                parent[j] += parent[i];
+                parent[i] = j;
+            }
+        }
+
+        public boolean isConnected(int p, int q) {
+            return find(p) == find(q);
+        }
+    }
 
 
+    //edge class for Kruskal's
+    private static class Edge implements Comparable<Edge> {
+        int from, to, weight;
+
+        Edge(int from, int to, int weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Edge other) {
+            return Integer.compare(this.weight, other.weight);
+        }
+    }
+    private static class Point {
+        int x, y;
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }
