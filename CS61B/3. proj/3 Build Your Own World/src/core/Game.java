@@ -5,6 +5,7 @@ import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 
+import java.awt.*;
 import java.io.*;
 
 public class Game {
@@ -34,6 +35,11 @@ public class Game {
                 case SEED_INPUT -> renderSeed();
                 case MAIN_GAME -> renderGame();
             }
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                handleKeyPress(key);
+            }
+            StdDraw.pause(10);
         }
     }
 
@@ -48,18 +54,19 @@ public class Game {
         }
 
         // Draw menu text
-        String title = "CS 61B: THE GAME";
+        String title = "CS 61B: Build Your Own World";
         String newGame = "New Game (N)";
         String loadGame = "Load Game (L)";
-        String quit = "Quit (Q)";
+        String quit = "Quit Game (Q)";
+        String author = "author: Fei Mo";
 
-        StdDraw.text((double) WIDTH / 2 - (double) title.length() / 2, (double) HEIGHT / 2 + 2, title);
+        StdDraw.setPenColor(Color.BLACK);
+        StdDraw.text((double) WIDTH / 2 - (double) title.length() / 2+5, (double) HEIGHT / 2 + 2, title);
         StdDraw.text((double) WIDTH / 2 - (double) newGame.length() / 2, (double) HEIGHT / 2, newGame);
         StdDraw.text((double) WIDTH / 2 - (double) loadGame.length() / 2, (double) HEIGHT / 2 - 1, loadGame);
         StdDraw.text((double) WIDTH / 2 - (double) quit.length() / 2, (double) HEIGHT / 2 - 2, quit);
-
+        StdDraw.text((double) WIDTH / 2 - (double) author.length() / 2, (double) HEIGHT / 2 - 3, author);
         StdDraw.show();
-        ter.renderFrame(menu);
     }
 
     public void handleKeyPress(char key) {
@@ -96,12 +103,12 @@ public class Game {
         String seed = seedInput.toString();
         String start = "Press S to start";
 
+        StdDraw.setPenColor(Color.BLACK);
         StdDraw.text((double) WIDTH /2 - (double)prompt.length()/2, (double)HEIGHT/2 + 1,prompt);
         StdDraw.text((double)WIDTH/2 - (double)seed.length()/2, (double)HEIGHT/2,seed);
         StdDraw.text((double)WIDTH/2 - (double)start.length()/2, (double)HEIGHT/2 - 1,start);
 
         StdDraw.show();
-        ter.renderFrame(seedScreen);
     }
 
     private void handleSeedInput(char key) {
@@ -115,7 +122,7 @@ public class Game {
     }
 
     private void startNewGame(long seed){
-        World world=new World(seed,WIDTH,HEIGHT);
+        world=new World(seed,WIDTH,HEIGHT);
         avatar = new Avatar(world);
     }
 
@@ -125,8 +132,6 @@ public class Game {
 
         // Render the world
         ter.renderFrame(world.world);
-
-        // Show the drawn content
         StdDraw.show();
     }
 

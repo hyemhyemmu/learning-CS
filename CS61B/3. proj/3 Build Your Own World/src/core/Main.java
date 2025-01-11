@@ -5,27 +5,15 @@ import tileengine.TERenderer;
 import tileengine.TETile;
 
 public class Main {
+    private static final int WIDTH = 70;
+    private static final int HEIGHT = 50;
 
     public static void main(String[] args) {
-        Game game = new Game();
-
-        // Set up StdDraw for input handling
+        StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT);
         StdDraw.enableDoubleBuffering();
-
-        // Start game loop
+        Game game = new Game();
         game.start();
-
-        // interactive module
-        //but apparently that there is multiple cases
-        while (true) {
-            if (StdDraw.hasNextKeyTyped()) {
-                char key = StdDraw.nextKeyTyped();
-                game.handleKeyPress(key);
-            }
-            StdDraw.pause(10);
-        }
-
-
-
     }
 }
