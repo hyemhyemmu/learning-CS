@@ -1,4 +1,4 @@
-#decision making in RSIC-V
+#decision making in RSIC-V - practise branches, functions.... syntax for stuff like that
 
 int main(){
  //example 1:
