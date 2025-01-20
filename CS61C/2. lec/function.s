@@ -16,4 +16,3 @@ sub s0, s0, s1 # s0 = s0 - s1, return f
 lw s0, 0(sp)
 addi sp,sp,8
 jr ra
-

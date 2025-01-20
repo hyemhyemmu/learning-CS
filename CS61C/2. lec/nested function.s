@@ -2,6 +2,7 @@
 # int sumSquare(int x, int y) {
 #   return mult(x, x) + y;
 # }
+
 mult:
     mul a0,a0,a1
     jr ra
