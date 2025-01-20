@@ -13,6 +13,12 @@ exp_inc_array_result:
 
 .text
 main:
+    # prologue begin
+    addi sp, sp, -8
+    sw a0, 0(sp)
+    sw a1, 4(sp)
+    # prologue end
+
     # pow: should return 2 ** 7 = 128
     li a0, 2
     li a1, 7
@@ -21,6 +27,12 @@ main:
     beq a0, t0, next_test
     la a0, pow_string
     j failure
+
+    # epilogue begin
+    lw a0, 0(sp)
+    lw a1, 4(sp)
+    addi sp, sp, 8
+    # epilogue end
 
 next_test:
     # inc_arr: increments "array" in place
@@ -49,7 +61,10 @@ next_test:
 #
 pow:
     # BEGIN PROLOGUE
-    # FIXME: Need to save the callee saved register(s)
+    addi sp, sp, -12 //s0, a0, a1
+    sw s0, 0(sp)
+    sw a0, 4(sp)
+    sw a1, 8(sp)
     # END PROLOGUE
     li s0, 1
 pow_loop:
@@ -60,7 +75,10 @@ pow_loop:
 pow_end:
     mv a0, s0
     # BEGIN EPILOGUE
-    # FIXME: Need to restore the callee saved register(s)
+    lw s0, 0(sp)
+    lw a0, 4(sp)
+    lw a1, 8(sp)
+    addi sp, sp, 12 //s0, a0, a1
     # END EPILOGUE
     jr ra
 
@@ -72,9 +90,12 @@ pow_end:
 # address as argument and increments the 32-bit value stored there.
 inc_arr:
     # BEGIN PROLOGUE
-    # FIXME: What other registers need to be saved?
-    addi sp, sp, -4
+    addi sp, sp, -20 //ra, s0, s1, s2, t0
     sw ra, 0(sp)
+    sw s0, 4(sp)
+    sw s1, 8(sp)
+    sw s2, 12(sp)          # Save s2
+    sw t0, 16(sp)          # Save t0
     # END PROLOGUE
     mv s0, a0 # Copy start of array to saved register
     mv s1, a1 # Copy length of array to saved register
@@ -84,20 +105,18 @@ inc_arr_loop:
     slli t1, t0, 2 # Convert array index to byte offset
     add a0, s0, t1 # Add offset to start of array
     # Prepare to call helper_fn
-    #
-    # FIXME: Add code to preserve the value in t0 before we call helper_fn
-    # Also ask yourself this: why don't we need to preserve t1?
-    #
     jal ra helper_fn
-    # FIXME: Restore t0
     # Finished call for helper_fn
     addi t0, t0, 1 # Increment counter
     j inc_arr_loop
 inc_arr_end:
     # BEGIN EPILOGUE
-    # FIXME: What other registers need to be restored?
-    lw ra, 0(sp)
-    addi sp, sp, 4
+    lw t0, 16(sp)          # Restore t0
+    lw s2, 12(sp)          # Restore s2
+    lw s1, 8(sp)           # Restore s1
+    lw s0, 4(sp)           # Restore s0
+    lw ra, 0(sp)           # Restore return address
+    addi sp, sp, 20        # Deallocate stack space
     # END EPILOGUE
     jr ra
 
@@ -111,13 +130,17 @@ inc_arr_end:
 # as appropriate.
 helper_fn:
     # BEGIN PROLOGUE
-    # FIXME: YOUR CODE HERE
+    addi sp, sp, -8        # Allocate space for ra and s0
+    sw ra, 0(sp)           # Save return address
+    sw s0, 4(sp)           # Save s0
     # END PROLOGUE
     lw t1, 0(a0)
     addi s0, t1, 1
     sw s0, 0(a0)
     # BEGIN EPILOGUE
-    # FIXME: YOUR CODE HERE
+    lw s0, 4(sp)           # Restore s0
+    lw ra, 0(sp)           # Restore return address
+    addi sp, sp, 8         # Deallocate stack space
     # END EPILOGUE
     jr ra
 
