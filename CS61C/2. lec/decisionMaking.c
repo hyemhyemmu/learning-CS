@@ -1,6 +1,5 @@
 #decision making in RSIC-V - practise branches, functions.... syntax for stuff like that
 
-int main(){
  //example 1:
 	if (i==j)
 		f=g+h;
@@ -37,6 +36,9 @@ int main(){
 	mv rd,rs //copy from rs to rd
 	li rd,13 //load number
 	nop	 //nop
-}
+
+
+
+
 
 
