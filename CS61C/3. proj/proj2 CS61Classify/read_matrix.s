@@ -31,7 +31,6 @@ read_matrix:
     sw s0, 16(sp)   # 存储文件描述符
     sw s1, 12(sp)   # 存储行
     sw s2, 8(sp)    # 存储列
-    sw s3, 4(sp)    # 存储字节大小
     sw s4, 0(sp)    # 存储矩阵指针
 
     mv s1, a1       
@@ -42,13 +41,14 @@ read_matrix:
     call fopen
     li t0, -1
     beq t0, a0, fopen_error
-    mv a0, s0
+    mv s0, a0
 
     # 2. 读取文件
     # 分配内存
     addi sp, sp, -8
     mv a1, sp
     li a2, 8
+    mv a0, s0
     call fread
     li t0, 8
     bne a0, t0, fread_error
@@ -64,25 +64,23 @@ read_matrix:
 
     # 3. 分配矩阵内存
     # 计算所需空间大小
-    mul t2, s1, s2
-    slli a0, t2, 2
-    sw a0, 0(s3)
-    call malloc
-
-    beq a0, zero, malloc_error
+    lw t0, 0(s1)    
+    lw t1, 0(s2)    
+    mul t2, t0, t1  
+    slli a0, t2, 2  
+    jal malloc      
+    beqz a0, malloc_error
+    mv s4, a0   
 
     # 读取矩阵
-    mv t0, a0 #先暂存指针
-    lw a0, 0(s0)
-    mv a1, t0
-    lw a2, 0(s3)
-    call fread
-
-    # 错误处理
-    beq a0, a2, fread_error
-
-    # 存储矩阵指针
-    sw a0, 0(s4)
+    mv a1, s4       
+    lw t2, 0(s1)    
+    lw t3, 0(s2)    
+    mul t2, t2, t3  
+    slli a2, t2, 2  
+    mv a0, s0       
+    jal fread       
+    bne a0, a2, fread_error
 
 
     # 3. 关闭文件

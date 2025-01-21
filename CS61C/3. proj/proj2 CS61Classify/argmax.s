@@ -34,7 +34,7 @@ loop:
     add t2, t2, a0 // addr
     lw t3, 0(t2) // load element
 
-    bge t3, t1, skip
+    ble t3, t1, skip
     mv t1, t3
     mv t4, t0  // index of t3 becomes new t4
 

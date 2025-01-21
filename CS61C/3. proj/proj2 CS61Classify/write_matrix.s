@@ -25,7 +25,7 @@
 write_matrix:
 
     # Prologue
-    addi sp, sp // 先留着
+    addi sp, sp, -20
     sw ra, 0(sp)
     sw s0, 4(sp) # 存放指向内存中矩阵存放位置的指针
     sw s1, 8(sp) # 存放文件标识符
@@ -50,7 +50,7 @@ write_matrix:
     sw s3, 4(sp)
 
     # 2. 把行列数写入文档
-    lw a0, s1
+    mv a0, s1
     lw a1, sp
     li a2, 2
     li a3, 4
@@ -66,7 +66,8 @@ write_matrix:
     li a3, 4
     call fwrite
 
-    beq a0, a2, fwrite_error
+    bne a0, a2, fwrite_error
+    addi sp, sp, 8
 
     # 4. 关闭文件
     lw a0, s1
