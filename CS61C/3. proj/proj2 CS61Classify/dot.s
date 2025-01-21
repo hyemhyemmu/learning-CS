@@ -19,7 +19,7 @@
 # =======================================================
 dot:
     # Prologue
-    addi sp, sp, -16
+    addi sp, sp, -20
     sw a0, 0(sp)
     sw a1, 4(sp)
     sw a2, 8(sp)
@@ -61,6 +61,11 @@ loop:
 
 loop_end:
     # Epilogue
+    #sw a0, 0(sp) we don't restore a0 cuz we need to use it as result output
+    sw a1, 4(sp)
+    sw a2, 8(sp)
+    sw a3, 12(sp)
+    sw a4, 16(sp)
     mv a0, t0
     addi sp, sp, 20
     jr ra
