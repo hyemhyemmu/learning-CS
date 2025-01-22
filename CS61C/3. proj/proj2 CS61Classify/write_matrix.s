@@ -75,6 +75,28 @@ write_matrix:
     li t0, -1
     beq a0, t0, fclose_error
 
+        # Epilogue
+    lw ra, 0(sp)      # 恢复返回地址
+    lw s0, 4(sp)      # 恢复寄存器 s0
+    lw s1, 8(sp)      # 恢复寄存器 s1
+    lw s2, 12(sp)     # 恢复寄存器 s2
+    lw s3, 16(sp)     # 恢复寄存器 s3
+    addi sp, sp, 20   # 恢复堆栈指针
+    jr ra             # 返回到调用函数
+
+# 错误处理标签
+fopen_error:
+    li a0, 27         # 设置错误代码 27
+    call exit         # 退出程序
+
+fwrite_error:
+    li a0, 30         # 设置错误代码 30
+    call exit         # 退出程序
+
+fclose_error:
+    li a0, 28         # 设置错误代码 28
+    call exit         # 退出程序
+
     
     
 
