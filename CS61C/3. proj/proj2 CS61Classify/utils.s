@@ -1,5 +1,5 @@
 ##############################################################
-# Do not modify! (But feel free to use the functions provided)
+util functions can be called
 ##############################################################
 
 #define c_print_int 1
