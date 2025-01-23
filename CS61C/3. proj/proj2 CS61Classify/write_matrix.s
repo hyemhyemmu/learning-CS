@@ -96,20 +96,3 @@ fwrite_error:
 fclose_error:
     li a0, 28         # 设置错误代码 28
     call exit         # 退出程序
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-    # Epilogue
-
-
-    jr ra
