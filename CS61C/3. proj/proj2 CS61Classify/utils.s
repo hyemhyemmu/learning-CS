@@ -1,5 +1,5 @@
 #################################
-util functions can be called
+util functions 
 #################################
 
 #define c_print_int 1
