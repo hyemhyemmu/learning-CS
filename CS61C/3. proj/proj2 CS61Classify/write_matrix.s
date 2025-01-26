@@ -75,7 +75,7 @@ write_matrix:
     li t0, -1
     beq a0, t0, fclose_error
 
-        # Epilogue
+     # Epilogue
     lw ra, 0(sp)      # 恢复返回地址
     lw s0, 4(sp)      # 恢复寄存器 s0
     lw s1, 8(sp)      # 恢复寄存器 s1
