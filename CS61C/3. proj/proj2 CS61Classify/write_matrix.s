@@ -22,6 +22,7 @@
 #   - If you receive an fwrite error or eof,
 #     this function terminates the program with error code 30
 # ==============================================================================
+
 write_matrix:
 
     # Prologue
