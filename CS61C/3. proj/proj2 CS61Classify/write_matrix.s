@@ -1,7 +1,7 @@
 .globl write_matrix
 
 .text
-# ==============================================================================
+# ===============================================================================
 # FUNCTION: Writes a matrix of integers into a binary file
 # FILE FORMAT:
 #   The first 8 bytes of the file will be two 4 byte ints representing the
@@ -21,7 +21,7 @@
 #     this function terminates the program with error code 28
 #   - If you receive an fwrite error or eof,
 #     this function terminates the program with error code 30
-# ===============================================================================
+# ================================================================================
 
 write_matrix:
 
