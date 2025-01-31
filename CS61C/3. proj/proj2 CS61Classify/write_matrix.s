@@ -1,7 +1,7 @@
 .globl write_matrix
 
 .text
-# ==========================================================================
+# ========================================================================
 # FUNCTION: Writes a matrix of integers into a binary file
 # FILE FORMAT:
 #   The first 8 bytes of the file will be two 4 byte ints representing the
