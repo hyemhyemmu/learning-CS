@@ -23,7 +23,7 @@
 #     this function terminates the program with error code 28
 #   - If you receive an fread error or eof,
 #     this function terminates the program with error code 29
-# ==============================================================================
+# =============================================================================
 read_matrix:
     # Prologue
     addi sp, sp, -24 
