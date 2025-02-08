@@ -1,7 +1,7 @@
 .globl read_matrix
 
 .text
-# ==============================================================================
+# =============================================================================
 # FUNCTION: Allocates memory and reads in a binary file as a matrix of integers
 #
 # FILE FORMAT:
