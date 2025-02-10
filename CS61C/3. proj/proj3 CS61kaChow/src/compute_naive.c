@@ -1,11 +1,60 @@
 #include "compute.h"
 
+// functions prototypes
+int *flip(matrix_t *matrix);
+
 // Computes the convolution of two matrices
 int convolve(matrix_t *a_matrix, matrix_t *b_matrix, matrix_t **output_matrix) {
   // TODO: convolve matrix a and matrix b, and store the resulting matrix in
+  int* flipped_matrix= flip(a_matrix);
+
+  // Create a new matrix to store the result
+  *output_matrix = malloc(sizeof(matrix_t));
+  (*output_matrix)->rows = a_matrix->rows - b_matrix->rows + 1;
+  (*output_matrix)->cols = a_matrix->cols - b_matrix->cols + 1;
+  (*output_matrix)->data = malloc((*output_matrix)->rows * (*output_matrix)->cols * sizeof(int32_t));
+
+  // Perform convolution
+  for (uint32_t i = 0; i < (*output_matrix)->rows; i++) {
+    for (uint32_t j = 0; j < (*output_matrix)->cols; j++) {
+      int32_t sum = 0;
+      // Apply the flipped kernel
+      for (uint32_t k = 0; k < b_matrix->rows; k++) {
+        for (uint32_t l = 0; l < b_matrix->cols; l++) {
+          sum += a_matrix->data[(i + k) * a_matrix->cols + (j + l)] * 
+                 flipped_matrix[k * b_matrix->cols + l];
+        }
+      }
+      (*output_matrix)->data[i * (*output_matrix)->cols + j] = sum;
+    }
+  }
+
+  // Free the flipped matrix
+  free(flipped_matrix);
+  return 0;
+  
   // output_matrix
 
   return -1;
+}
+
+int *flip(matrix_t *matrix){
+  uint32_t rows= matrix->rows;
+  uint32_t cols= matrix->cols;
+  int32_t *original_matrix= matrix->data;
+  int* flipped_matrix= (int*)malloc(rows*cols*sizeof(int));
+  
+  // iterate over each elements
+  for (uint32_t i=0; i<rows; i++){
+    for (uint32_t j=0; j<cols; j++){
+      int original_pos = i * cols + j; // （i,j）in original matrix
+      int flipped_pos = (rows-i-1) * cols + (cols-j-1); // （rows-i-1, cols-j-1）in flipped matrix
+
+      flipped_matrix[flipped_pos] = original_matrix[original_pos];
+    }
+  }
+  
+  return flipped_matrix;
 }
 
 // Executes a task
@@ -44,5 +93,6 @@ int execute_task(task_t *task) {
   free(a_matrix);
   free(b_matrix);
   free(output_matrix);
+  free(flip(a_matrix));
   return 0;
 }
