@@ -1,12 +1,16 @@
 #include "compute.h"
 
 // functions prototypes
-int *flip(matrix_t *matrix);
+int32_t* flip(matrix_t *matrix);
 
 // Computes the convolution of two matrices
 int convolve(matrix_t *a_matrix, matrix_t *b_matrix, matrix_t **output_matrix) {
   // TODO: convolve matrix a and matrix b, and store the resulting matrix in
-  int* flipped_matrix= flip(a_matrix);
+  
+  matrix_t flipped_matrix=(matrix_t*)malloc(sizeof(matrix_t));
+  flipped_matrix.rows = a_matrix->rows;
+  flipped_matrix.cols = a_matrix->cols;
+  flipped_matrix.data = flip(b_matrix);
 
   // Create a new matrix to store the result
   *output_matrix = malloc(sizeof(matrix_t));
@@ -38,11 +42,11 @@ int convolve(matrix_t *a_matrix, matrix_t *b_matrix, matrix_t **output_matrix) {
   return -1;
 }
 
-int *flip(matrix_t *matrix){
+int32_t* flip(matrix_t *matrix){
   uint32_t rows= matrix->rows;
   uint32_t cols= matrix->cols;
   int32_t *original_matrix= matrix->data;
-  int* flipped_matrix= (int*)malloc(rows*cols*sizeof(int));
+  int32_t* flipped_matrix_data= (int32_t*)malloc(rows*cols*sizeof(int));
   
   // iterate over each elements
   for (uint32_t i=0; i<rows; i++){
@@ -50,11 +54,11 @@ int *flip(matrix_t *matrix){
       int original_pos = i * cols + j; // （i,j）in original matrix
       int flipped_pos = (rows-i-1) * cols + (cols-j-1); // （rows-i-1, cols-j-1）in flipped matrix
 
-      flipped_matrix[flipped_pos] = original_matrix[original_pos];
+      flipped_matrix_data[flipped_pos] = original_matrix[original_pos];
     }
   }
   
-  return flipped_matrix;
+  return flipped_matrix_data;
 }
 
 // Executes a task
