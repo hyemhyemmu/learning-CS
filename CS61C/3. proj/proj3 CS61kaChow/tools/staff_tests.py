@@ -3,8 +3,6 @@ import math
 from framework import Test, TestSpec, Task, Matrix, randint
 import filters
 
-a
-
 @Test()
 def test_tiny(test: TestSpec):
     test.add_task(Task(Matrix.random(2, 2, min_value=1, max_value=10),
