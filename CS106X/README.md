@@ -2,7 +2,9 @@
 ### Lecture content
 1. Functions, Strings
 2. I/O Stream
-3. Vector(Lists), Queue, Stack
+3. Vector("Lists" in C), Queue, Stack
+4. Set, Struct, Map("Disctionary")
+5. Recursion
 
 
 ### Assignments/ Projects
