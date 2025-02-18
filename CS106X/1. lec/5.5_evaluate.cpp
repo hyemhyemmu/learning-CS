@@ -80,6 +80,5 @@ int main() {
     cout << evaluate("(3+5)*2") << endl;    // 16
     cout << evaluate("10/(2+3)") << endl;   // 2
     cout << evaluate("100-5*10+50") << endl; // 100
-    system("pause");
     return 0;
 }

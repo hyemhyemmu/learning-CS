@@ -4,7 +4,7 @@
 2. I/O Stream
 3. Vector("Lists" in C), Queue, Stack
 4. Set, Struct, Map("Disctionary")
-5. Recursion
+5. Recursion, Exhaustive Search
 
 
 ### Assignments/ Projects
