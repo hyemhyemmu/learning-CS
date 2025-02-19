@@ -5,7 +5,7 @@ void BankAccount::deposit(double num){
     balance += num;
 }
 
-void BankAccount::getBalance(){
+void BankAccount::getBalance() const{
     cout << "current balance is: " << balance << endl;
 }
 
