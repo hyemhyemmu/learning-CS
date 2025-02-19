@@ -5,8 +5,8 @@ void BankAccount::deposit(double num){
     balance += num;
 }
 
-void BankAccount::getBalance() const{
-    cout << "current balance is: " << balance << endl;
+double BankAccount::getBalance() const{
+    return balance;
 }
 
 BankAccount::BankAccount(string name, double balance) {
@@ -16,4 +16,13 @@ BankAccount::BankAccount(string name, double balance) {
 
 bool operator==(const BankAccount &acc1, const BankAccount& acc2){
     return acc1.name == acc2.name && acc1.balance == acc2.balance;
+}
+
+string BankAccount::getName() const{
+    return name;
+}
+
+ostream& operator <<(ostream& out, const BankAccount acc){
+    out << acc.getName() << " has " << " $" << acc.getBalance();
+    return out;
 }

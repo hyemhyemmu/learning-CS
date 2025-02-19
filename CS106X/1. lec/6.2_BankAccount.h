@@ -7,7 +7,8 @@ class BankAccount{
 public:
     BankAccount(string name,double balance);
     void deposit(double num);
-    void getBalance() const;
+    double getBalance() const;
+    string getName() const;
     
 private:
     string name;
