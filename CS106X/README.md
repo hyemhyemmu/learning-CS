@@ -5,7 +5,7 @@
 3. Vector("Lists" in C), Queue, Stack
 4. Set, Struct, Map("Disctionary")
 5. Recursion, Exhaustive Search, Backtracking
-6. Struct, Pointers, Linked List
+6. Struct, Pointers, Linked List, Arrays
 
 
 ### Assignments/ Projects
