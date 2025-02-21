@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-//  template specialization precedence
+//  function template specialization precedence
 //  1. full template
 //  2. overload template
 //  3. specialized template
