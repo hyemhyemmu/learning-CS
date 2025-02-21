@@ -46,6 +46,5 @@ void diceSumHelper(int dice, int desiredSum, int currentSum, vector<int>& chosen
 
 int main(){
     diceSum(3, 8);
-    system("pause");
     return 0;
 }

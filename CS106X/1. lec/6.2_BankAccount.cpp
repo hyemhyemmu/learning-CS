@@ -6,6 +6,5 @@ int main(){
     BankAccount acc1 ("William", 100.00);
     acc1.deposit(1000.99);
     cout << acc1 << endl;
-    system("pause");
     return 0;
 }

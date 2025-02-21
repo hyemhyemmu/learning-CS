@@ -7,7 +7,7 @@
 4. 集合（Set）、结构体（Struct）、映射（Map，“字典”）
 5. 递归（Recursion）、穷举搜索（Exhaustive Search）、回溯（Backtracking）
 6. 结构体（Struct）、指针（Pointers）、链表（Linked List）、数组（Arrays）
-7. 继承（Inheritance）
+7. 继承（Inheritance）、多态（Polymorphism）
 
 ### 作业 / 项目 / 练习
 *由于 CS106X 自 2019 年后不再更新，我从以下资源选取了练习：*
