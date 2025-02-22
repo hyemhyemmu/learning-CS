@@ -76,10 +76,6 @@ class Scene {
    - 自动调整场景
    - 智能建议
 
-2. **远程控制**
-   - 网络通信接口
-   - 设备状态推送
-   - 远程操作验证
 
 ### 示例代码
 ```cpp
@@ -97,21 +93,9 @@ int main() {
     movieMode->addAction(livingRoomLight, "brightness:20");
     movieMode->addAction(bedRoomAC, "temp:24,mode:silent");
     
-    // 触发场景
-    home.activateScene(movieMode);
-    
-    // 能源统计
-    home.printEnergyReport();
     
     return 0;
 }
 ```
-
-## 设计建议
-1. 使用工厂模式创建不同类型的设备
-2. 使用观察者模式实现设备状态变化通知
-3. 使用命令模式实现场景控制
-4. 使用策略模式实现不同的节能策略
-5. 考虑使用单例模式管理核心控制器
 
 

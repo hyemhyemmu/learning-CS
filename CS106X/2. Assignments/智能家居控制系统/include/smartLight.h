@@ -1,7 +1,7 @@
 #ifndef SMART_LIGHT_H
 #define SMART_LIGHT_H
 
-#include "device.h"
+#include "D:\0.mofei\Code\learning CS\CS106X\2. Assignments\智能家居控制系统\include\device.h"
 const int DEFAULT_LIGHT = 50;
 const int DEFAULT_COLOR_TEMP = 4000;
 
