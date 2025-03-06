@@ -14,3 +14,8 @@
 - Stanford University - CS106B - Programming Abstractions
 - Tsinghua University - Object Oriented Programming
 - Peking University - Programming Practice in C++
+
+1. Smart Home Control System  
+2. Inherit `string` to create `MyString`  
+3. Functor-based Filter  
+4. String Operation Parser  
