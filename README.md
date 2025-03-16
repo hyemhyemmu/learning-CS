@@ -5,3 +5,4 @@ consists of:
 - UC Berkeley - CS61C - Great Ideas in Computer Architecture
 - Stanford University - CS106X - Programming Abstractions in C++
 - Stanford University - CS106L - Standard C++ Programming
+- Dive into Deep Learning
