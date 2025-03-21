@@ -4,9 +4,7 @@
 #define BLACK 'B'
 #define WHITE 'W'
 
-// reversi棋，能够实现人机对战
-
-// function prototype
+// function prototype - explained when defined rather than here
 bool checkLegalInDirection(char board[][26], int n, char color, int row, int col, int deltaRow, int deltaCol);
 bool checkValidMove(char board[][26], int n, char color, int row, int col);
 void boardConfigurations(char board[][26], int n);
@@ -14,41 +12,192 @@ void InitializeBoard(char board[][26], int n);
 void printBoard(char board[][26], int n);
 void printAvailableMoves(char board[][26], int n, char color);
 void makeMove(char board[][26], int n, char color, int row, int col);
+int countFlips(char board[][26], int n, char color, int row, int col);
+bool hasValidMove(char board[][26], int n, char color);
+void getComputerMove(char board[][26], int n, char computerColor, int *row, int *col);
+void playGame(char board[][26], int n, char computerColor);
+char getWinner(char board[][26], int n);
 
 // main function
 int main(){
     int dimension;
     printf("Enter the board dimension: ");
     scanf("%d", &dimension);
-    char board[26][26]; // 使用固定大小的数组，避免边界问题
-
+    char board[26][26];
+    char computerColor;
+    
+    printf("Computer plays (B/W) : ");
+    scanf(" %c", &computerColor);
+    
     InitializeBoard(board, dimension);
     printBoard(board, dimension);
-
-    // configuration
-    boardConfigurations(board, dimension);
-
-    // print available moves
-    printAvailableMoves(board, dimension, 'W');
-    printAvailableMoves(board, dimension, 'B');
-
-    // move 
-    printf("Enter a move:\n");
-    char color, row, col;
-    scanf(" %c%c%c", &color, &row, &col);
-    int rowIdx = row - 'a';
-    int colIdx = col - 'a';
-    bool isValidMove = checkValidMove(board, dimension, color, rowIdx, colIdx);
-    if (isValidMove){
-        printf("Valid move.\n");
-        makeMove(board, dimension, color, rowIdx, colIdx);
-    } else {
-        printf("Invalid move.\n");
-    }
-
-    // print the board
-    printBoard(board, dimension);
+    
+    // main game logic
+    playGame(board, dimension, computerColor);
+    
     return 0;
+}
+
+// [MAIN GAME]
+void playGame(char board[][26], int n, char computerColor) {
+    char humanColor = (computerColor == BLACK) ? WHITE : BLACK;
+    char currentPlayer = BLACK; // the example case says black always goes first
+    bool gameOver = false;
+    
+    while (!gameOver) {
+        // check if current player still able to move
+        if (!hasValidMove(board, n, currentPlayer)) {
+            // check if the other player still able to move
+            char opponent = (currentPlayer == BLACK) ? WHITE : BLACK;
+            if (!hasValidMove(board, n, opponent)) {
+                // if both players cannot move, game over
+                char winner = getWinner(board, n);
+                if (winner == BLACK) {
+                    printf("B player wins.\n");
+                } else if (winner == WHITE) {
+                    printf("W player wins.\n");
+                } else {
+                    printf("Draw!\n");
+                }
+                gameOver = true;
+                break;
+            } else {
+                // switch turn if current player cannot move
+                printf("%c player has no valid move.\n", currentPlayer);
+                currentPlayer = opponent;
+                continue;
+            }
+        }
+        
+        // human plaer's round logic
+        if (currentPlayer == humanColor) {
+            char row, col;
+            printf("Enter move for color %c (RowCol): ", humanColor);
+            scanf(" %c%c", &row, &col);
+            
+            int rowIdx = row - 'a';
+            int colIdx = col - 'a';
+            
+            if (rowIdx < 0 || rowIdx >= n || colIdx < 0 || colIdx >= n || 
+                !checkValidMove(board, n, humanColor, rowIdx, colIdx)) {
+                printf("Invalid move.\n"); // game over staright away when invalid move!
+                char winner = computerColor;
+                printf("%c player wins.\n", winner);
+                gameOver = true;
+                continue;
+            }
+            
+            makeMove(board, n, humanColor, rowIdx, colIdx);
+            printBoard(board, n);
+        } 
+
+        // conputer round logic
+        else {
+            int computerRow, computerCol;
+            getComputerMove(board, n, computerColor, &computerRow, &computerCol);
+            printf("Computer places %c at %c%c.\n", computerColor, 
+                   'a' + computerRow, 'a' + computerCol);
+            
+            makeMove(board, n, computerColor, computerRow, computerCol);
+            printBoard(board, n);
+        }
+        
+        // switch turn
+        currentPlayer = (currentPlayer == BLACK) ? WHITE : BLACK;
+    }
+}
+
+// computer move logic 
+void getComputerMove(char board[][26], int n, char computerColor, int *row, int *col) {
+    int maxScore = -1;
+    *row = -1;
+    *col = -1;
+    
+    // iterate all the board to find the best spot
+    for (int r = 0; r < n; r++) {
+        for (int c = 0; c < n; c++) {
+            if (checkValidMove(board, n, computerColor, r, c)) {
+                int score = countFlips(board, n, computerColor, r, c);
+                
+                // update the heightest score (when same, keep the smaller index one)
+                if (score > maxScore || 
+                   (score == maxScore && r < *row) || 
+                   (score == maxScore && r == *row && c < *col)) {
+                    maxScore = score;
+                    *row = r;
+                    *col = c;
+                }
+            }
+        }
+    }
+}
+
+// helper function for getComputerMove, to calculate the score of a move
+int countFlips(char board[][26], int n, char color, int row, int col) {
+    char opponent = (color == BLACK) ? WHITE : BLACK;
+    int totalFlips = 0;
+    
+    // check 8 directions, pretty much same as checkValidMove
+    for (int deltaRow = -1; deltaRow <= 1; deltaRow++) {
+        for (int deltaCol = -1; deltaCol <= 1; deltaCol++) {
+            if (deltaRow == 0 && deltaCol == 0) {
+                continue;
+            }
+            
+            int flips = 0;
+            int r = row + deltaRow;
+            int c = col + deltaCol;
+            
+            // count flipperble pieces
+            while (r >= 0 && r < n && c >= 0 && c < n && board[r][c] == opponent) {
+                flips++;
+                r += deltaRow;
+                c += deltaCol;
+            }
+            
+            // confirm the end is own piece
+            if (r >= 0 && r < n && c >= 0 && c < n && board[r][c] == color) {
+                totalFlips += flips;
+            }
+        }
+    }
+    
+    return totalFlips;
+}
+
+// check if a player has valid move
+bool hasValidMove(char board[][26], int n, char color) {
+    for (int row = 0; row < n; row++) {
+        for (int col = 0; col < n; col++) {
+            if (checkValidMove(board, n, color, row, col)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// get the winner
+char getWinner(char board[][26], int n) {
+    int blackCount = 0, whiteCount = 0;
+    
+    for (int row = 0; row < n; row++) {
+        for (int col = 0; col < n; col++) {
+            if (board[row][col] == BLACK) {
+                blackCount++;
+            } else if (board[row][col] == WHITE) {
+                whiteCount++;
+            }
+        }
+    }
+    
+    if (blackCount > whiteCount) {
+        return BLACK;
+    } else if (whiteCount > blackCount) {
+        return WHITE;
+    } else {
+        return UNOCCUPIED; 
+    }
 }
 
 // functions
