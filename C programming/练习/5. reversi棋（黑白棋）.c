@@ -4,6 +4,8 @@
 #define BLACK 'B'
 #define WHITE 'W'
 
+// reversi棋，能够实现人机对战
+
 // function prototype
 bool checkLegalInDirection(char board[][26], int n, char color, int row, int col, int deltaRow, int deltaCol);
 bool checkValidMove(char board[][26], int n, char color, int row, int col);
