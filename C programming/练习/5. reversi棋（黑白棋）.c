@@ -4,6 +4,7 @@
 #define BLACK 'B'
 #define WHITE 'W'
 
+// 经典黑白棋，能够实现人机对战功能
 // function prototype - explained when defined rather than here
 bool checkLegalInDirection(char board[][26], int n, char color, int row, int col, int deltaRow, int deltaCol);
 bool checkValidMove(char board[][26], int n, char color, int row, int col);
