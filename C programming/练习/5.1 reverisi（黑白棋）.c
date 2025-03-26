@@ -591,3 +591,4 @@ bool hasAnyValidMove(char board[][26], int n, char color) {
 char getOpponent(char color) {
     return (color == BLACK) ? WHITE : BLACK;
 }
+
