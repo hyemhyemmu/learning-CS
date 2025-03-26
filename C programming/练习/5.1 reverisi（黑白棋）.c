@@ -4,6 +4,7 @@
 #define BLACK 'B'
 #define WHITE 'W'
 const double OCCUPIED_FACTOR = 0.7; // define "close to the end" as 0.7/1 the board being occupied
+
 /**
  * for this smarter version, I tried to implement it with the classic "Minimax" algorithm,
  * with "Alpha-Beta Pruning" to improve the performance.
