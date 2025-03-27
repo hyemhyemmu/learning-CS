@@ -465,25 +465,18 @@ int alphaBeta(char board[][26], int n, char player, int depth, int alpha, int be
     
     // iterate through all moves
     for (int i = 0; i < moveCount; i++) {
-        int row = moves[i].row;
-        int col = moves[i].col;
-        int flippedPositions[64][2]; // Max possible flips is 64-1
+        char newBoard[26][26];
+        copyBoard(board, newBoard, n);
+        doMove(newBoard, n, player, moves[i].row, moves[i].col);
         
-        // Apply move and record flipped positions
-        int flipCount = applyMove(board, n, player, row, col, flippedPositions);
-        
-        // Recursive search
-        int score = -alphaBeta(board, n, opponent, depth - 1, -beta, -alpha, NULL, NULL);
-        
-        // Undo the move
-        undoMove(board, n, player, row, col, flippedPositions, flipCount);
+        int score = -alphaBeta(newBoard, n, opponent, depth - 1, -beta, -alpha, NULL, NULL);
         
         if (searchAbort) return 0;
         
         if (score > maxScore) {
             maxScore = score;
-            localBestRow = row;
-            localBestCol = col;
+            localBestRow = moves[i].row;
+            localBestCol = moves[i].col;
             
             if (score > alpha) {
                 alpha = score;
@@ -507,23 +500,23 @@ int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
     searchStart = clock();
     searchAbort = 0;
     
-    // Only copy the board once at top level
-    char tempBoard[26][26];
-    memcpy(tempBoard, board, n * sizeof(tempBoard[0])); // Copy only the rows we need
+    // create non-const copy, same operation as in the main function
+    char nonConstBoard[26][26];
+    copyBoard(board, nonConstBoard, n);
     
     // iterative deepening search
-    int bestScore = -999999;
+    int bestScore = -999999; // random small number
     *row = -1;
     *col = -1;
     
-    // first check corner positions - quick win!
+    // first check corner positions
     int corners[4][2] = {{0,0}, {0,n-1}, {n-1,0}, {n-1,n-1}};
     for (int i = 0; i < 4; i++) {
         int r = corners[i][0], c = corners[i][1];
-        if (checkValidMove(tempBoard, n, turn, r, c)) {
+        if (checkValidMove(nonConstBoard, n, turn, r, c)) {
             *row = r;
             *col = c;
-            return 999999; // Corner is always best
+            return 999999;
         }
     }
     
@@ -531,7 +524,7 @@ int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
     int emptyCount = 0;
     for (int r = 0; r < n; r++) {
         for (int c = 0; c < n; c++) {
-            if (tempBoard[r][c] == UNOCCUPIED) emptyCount++;
+            if (nonConstBoard[r][c] == UNOCCUPIED) emptyCount++;
         }
     }
     
@@ -541,10 +534,10 @@ int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
     else if (emptyCount <= 16) maxDepth = 9;
     else maxDepth = 7;
     
-    // iterative deepening search - using our optimized tempBoard
+    // iterative deepening search
     for (int depth = 1; depth <= maxDepth && !searchAbort; depth++) {
         int currentRow = -1, currentCol = -1;
-        int score = alphaBeta(tempBoard, n, turn, depth, -999999, 999999, &currentRow, &currentCol);
+        int score = alphaBeta(nonConstBoard, n, turn, depth, -999999, 999999, &currentRow, &currentCol);
         
         if (!searchAbort && currentRow >= 0 && currentCol >= 0) {
             bestScore = score;
@@ -562,7 +555,7 @@ int makeMove(const char board[][26], int n, char turn, int *row, int *col) {
         // if deep search fails, perform simple search
         Move moves[64];
         int moveCount;
-        getSortedMoves(tempBoard, n, turn, moves, &moveCount);
+        getSortedMoves(nonConstBoard, n, turn, moves, &moveCount);
         if (moveCount > 0) {
             *row = moves[0].row;
             *col = moves[0].col;
@@ -728,7 +721,7 @@ void printAvailableMoves(char board[][26], int n, char color) {
 }
 
 // helper function
-bool checkLegalInDirection(const char board[][26], int n, int row, int col, char colour, int deltaRow, int deltaCol) {
+bool checkLegalInDirection(char board[][26], int n, int row, int col, char colour, int deltaRow, int deltaCol) {
     char opponent = (colour == BLACK) ? WHITE : BLACK;
     
     // next spot 
@@ -770,14 +763,17 @@ bool checkValidMove(const char board[][26], int n, char color, int row, int col)
         return false;
     }
     
-    // No need to create non-const copy - use board directly!
+    // create non-const copy for passing to checkLegalInDirection
+    char nonConstBoard[26][26];
+    copyBoard(board, nonConstBoard, n);
+    
     for (int deltaRow = -1; deltaRow <= 1; deltaRow++) {
         for (int deltaCol = -1; deltaCol <= 1; deltaCol++) {
             if (deltaRow == 0 && deltaCol == 0) {
                 continue;
             }
             
-            if (checkLegalInDirection(board, n, row, col, color, deltaRow, deltaCol)) {
+            if (checkLegalInDirection(nonConstBoard, n, row, col, color, deltaRow, deltaCol)) {
                 return true;
             }
         }
@@ -787,8 +783,30 @@ bool checkValidMove(const char board[][26], int n, char color, int row, int col)
 }
 
 void doMove(char board[][26], int n, char color, int row, int col) {
-    // Use our optimized function - NULL means we don't track flips
-    applyMove(board, n, color, row, col, NULL);
+    // place the piece
+    board[row][col] = color;
+    
+    for (int deltaRow = -1; deltaRow <= 1; deltaRow++) {
+        for (int deltaCol = -1; deltaCol <= 1; deltaCol++) {
+            if (deltaRow == 0 && deltaCol == 0) {
+                continue;
+            }
+            
+            // if can flip this direction
+            if (checkLegalInDirection(board, n, row, col, color, deltaRow, deltaCol)) {
+                int r = row + deltaRow;
+                int c = col + deltaCol;
+                char opponent = (color == BLACK) ? WHITE : BLACK;
+                
+                // flip all the pieces
+                while (board[r][c] == opponent) {
+                    board[r][c] = color;
+                    r += deltaRow;
+                    c += deltaCol;
+                }
+            }
+        }
+    }
 }
 
 // check if a piece is stable (cannot be flipped) - a key helper function
@@ -1091,7 +1109,8 @@ int countFlips(const char board[][26], int n, char color, int row, int col) {
         return 0;  // position already occupied, cannot place piece
     }
     
-    // No need to copy - direct calculation is more efficient
+    char nonConstBoard[26][26];
+    copyBoard(board, nonConstBoard, n);
     int totalFlips = 0;
     char opponent = (color == BLACK) ? WHITE : BLACK;
     
@@ -1107,70 +1126,18 @@ int countFlips(const char board[][26], int n, char color, int row, int col) {
             int c = col + deltaCol;
             
             // count number of opponent pieces that can be flipped in current direction
-            while (positionInBounds(n, r, c) && board[r][c] == opponent) {
+            while (positionInBounds(n, r, c) && nonConstBoard[r][c] == opponent) {
                 flips++;
                 r += deltaRow;
                 c += deltaCol;
             }
             
             // if this direction forms a sandwich, add to count
-            if (flips > 0 && positionInBounds(n, r, c) && board[r][c] == color) {
+            if (flips > 0 && positionInBounds(n, r, c) && nonConstBoard[r][c] == color) {
                 totalFlips += flips;
             }
         }
     }
     
     return totalFlips;
-}
-
-// New function: Apply move and return flip positions
-int applyMove(char board[][26], int n, char color, int row, int col, int flippedPositions[][2]) {
-    // Place the piece
-    board[row][col] = color;
-    int totalFlips = 0;
-    char opponent = (color == BLACK) ? WHITE : BLACK;
-    
-    // Check all 8 directions
-    for (int deltaRow = -1; deltaRow <= 1; deltaRow++) {
-        for (int deltaCol = -1; deltaCol <= 1; deltaCol++) {
-            if (deltaRow == 0 && deltaCol == 0) continue;
-            
-            // If this direction has valid flips
-            if (checkLegalInDirection(board, n, row, col, color, deltaRow, deltaCol)) {
-                int r = row + deltaRow;
-                int c = col + deltaCol;
-                
-                // Flip pieces and record positions
-                while (board[r][c] == opponent) {
-                    board[r][c] = color;
-                    
-                    // Record position in our tracker array
-                    if (flippedPositions != NULL) {
-                        flippedPositions[totalFlips][0] = r;
-                        flippedPositions[totalFlips][1] = c;
-                    }
-                    
-                    totalFlips++;
-                    r += deltaRow;
-                    c += deltaCol;
-                }
-            }
-        }
-    }
-    
-    return totalFlips;
-}
-
-// New function: Undo a move
-void undoMove(char board[][26], int n, char color, int row, int col, int flippedPositions[][2], int flipCount) {
-    // Clear the original move
-    board[row][col] = UNOCCUPIED;
-    
-    // Flip back all changed pieces
-    char opponent = (color == BLACK) ? WHITE : BLACK;
-    for (int i = 0; i < flipCount; i++) {
-        int r = flippedPositions[i][0];
-        int c = flippedPositions[i][1];
-        board[r][c] = opponent;
-    }
 }
