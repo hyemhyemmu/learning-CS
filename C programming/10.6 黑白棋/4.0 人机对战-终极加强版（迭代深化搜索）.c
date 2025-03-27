@@ -82,25 +82,25 @@ bool hasAnyValidMove(const char board[][26], int n, char color);
 char getOpponent(char color);
 bool isStablePiece(const char board[][26], int n, int row, int col);
 
-// // main function
-// int main(){
-//     int dimension;
-//     printf("Enter the board dimension: ");
-//     scanf("%d", &dimension);
-//     char board[26][26];
-//     char computerColor;
+// main function
+int main(){
+    int dimension;
+    printf("Enter the board dimension: ");
+    scanf("%d", &dimension);
+    char board[26][26];
+    char computerColor;
     
-//     printf("Computer plays (B/W) : ");
-//     scanf(" %c", &computerColor);
+    printf("Computer plays (B/W) : ");
+    scanf(" %c", &computerColor);
     
-//     InitializeBoard(board, dimension);
-//     printBoard(board, dimension);
+    InitializeBoard(board, dimension);
+    printBoard(board, dimension);
     
-//     // main game logic
-//     playGame(board, dimension, computerColor);
+    // main game logic
+    playGame(board, dimension, computerColor);
     
-//     return 0;
-// }
+    return 0;
+}
 
 
 
