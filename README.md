@@ -6,3 +6,4 @@ consists of:
 - Stanford University - CS106X - Programming Abstractions in C++
 - Stanford University - CS106L - Standard C++ Programming
 - Dive into Deep Learning
+- Institute of Computing Technology, CAS - One Student One Chip
