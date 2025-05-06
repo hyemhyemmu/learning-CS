@@ -1,4 +1,4 @@
-// encoder
+// decoder
 module decode24(x,en,y);
   input  [1:0] x;
   input  en;
