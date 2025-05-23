@@ -8,6 +8,11 @@ module counter_testbench();
     reg ce;
     wire [3:0] LEDS;
 
+    // ÉùÃ÷ÖÐ¼ä±äÁ¿£¨±ØÐëÒÆµ½¹ý³Ì¿éÍâ²¿£©
+    integer saved_cycle_counter;
+    integer saved_led_value;
+    integer i;
+
     counter ctr (
         .clk(clock),
         .ce(ce),
@@ -44,10 +49,10 @@ module counter_testbench();
         // and check that the internal cycle_counter is incrementing
         repeat (10) @(posedge clock);
         $display("Time: %0t, CE: %b, LEDS: %d", $time, ce, LEDS);
-        
+
         // Check if cycle counter is working (should be non-zero after some cycles)
-        if (ctr.cycle_counter > 0) begin
-            $display("PASS: Cycle counter is incrementing (%d)", ctr.cycle_counter);
+        if (counter_testbench.ctr.cycle_counter > 0) begin
+            $display("PASS: Cycle counter is incrementing (%d)", counter_testbench.ctr.cycle_counter);
         end else begin
             $display("FAIL: Cycle counter not incrementing");
         end
@@ -55,16 +60,15 @@ module counter_testbench();
         // Test 2: Disable clock enable, counter should stop
         $display("\n=== Test 2: Disable clock (ce=0) ===");
         ce = 0;
-        
-        // Store current values
-        integer saved_cycle_counter = ctr.cycle_counter;
-        integer saved_led_value = LEDS;
+
+        saved_cycle_counter = counter_testbench.ctr.cycle_counter;
+        saved_led_value = LEDS;
         
         repeat (10) @(posedge clock);
         $display("Time: %0t, CE: %b, LEDS: %d", $time, ce, LEDS);
         
         // Check that counters didn't change
-        if (ctr.cycle_counter == saved_cycle_counter && LEDS == saved_led_value) begin
+        if (counter_testbench.ctr.cycle_counter == saved_cycle_counter && LEDS == saved_led_value) begin
             $display("PASS: Counter stopped when ce=0");
         end else begin
             $display("FAIL: Counter continued when ce=0");
@@ -75,16 +79,15 @@ module counter_testbench();
         ce = 1;
         
         // Force the cycle counter close to overflow to test LED increment
-        // This is a white-box test accessing internal signals
-        ctr.cycle_counter = 27'd124_999_995; // Close to CYCLES_PER_SECOND - 1
-        
-        $display("Forcing cycle_counter to near overflow: %d", ctr.cycle_counter);
+        counter_testbench.ctr.cycle_counter = 27'd124_999_995;
+
+        $display("Forcing cycle_counter to near overflow: %d", counter_testbench.ctr.cycle_counter);
         
         repeat (10) @(posedge clock);
-        $display("Time: %0t, CE: %b, LEDS: %d, cycle_counter: %d", $time, ce, LEDS, ctr.cycle_counter);
+        $display("Time: %0t, CE: %b, LEDS: %d, cycle_counter: %d", $time, ce, LEDS, counter_testbench.ctr.cycle_counter);
         
         // Check if LED incremented and cycle counter reset
-        if (ctr.cycle_counter < 10 && LEDS == 1) begin
+        if (counter_testbench.ctr.cycle_counter < 10 && LEDS == 1) begin
             $display("PASS: LED incremented and cycle counter reset");
         end else begin
             $display("FAIL: LED increment or cycle counter reset failed");
@@ -92,12 +95,11 @@ module counter_testbench();
         
         // Test 4: Test 4-bit overflow (LED counter wraps from 15 to 0)
         $display("\n=== Test 4: Test 4-bit LED counter overflow ===");
-        
-        // Force LED counter to 15 and test wrap-around
-        ctr.led_cnt_value = 4'd15;
-        ctr.cycle_counter = 27'd124_999_999; // One cycle before overflow
-        
-        @(posedge clock); // This should trigger LED overflow
+
+        counter_testbench.ctr.led_cnt_value = 4'd15;
+        counter_testbench.ctr.cycle_counter = 27'd124_999_999;
+
+        @(posedge clock);
         $display("Time: %0t, CE: %b, LEDS: %d", $time, ce, LEDS);
         
         if (LEDS == 0) begin
@@ -106,17 +108,16 @@ module counter_testbench();
             $display("FAIL: LED counter wrap-around failed");
         end
         
-        // Test 5: Multiple increments
+        // Test 5: Test multiple increments
         $display("\n=== Test 5: Test multiple increments ===");
-        for (integer i = 0; i < 3; i = i + 1) begin
-            // Force near overflow
-            ctr.cycle_counter = 27'd124_999_999;
+        for (i = 0; i < 3; i = i + 1) begin
+            counter_testbench.ctr.cycle_counter = 27'd124_999_999;
             @(posedge clock);
             $display("Increment %0d: LEDS = %d", i+1, LEDS);
         end
         
         $display("\n=== All tests completed ===");
-        $display("Final state - CE: %b, LEDS: %d, cycle_counter: %d", ce, LEDS, ctr.cycle_counter);
+        $display("Final state - CE: %b, LEDS: %d, cycle_counter: %d", ce, LEDS, counter_testbench.ctr.cycle_counter);
 
         `ifndef IVERILOG
             $vcdplusoff;
@@ -124,4 +125,3 @@ module counter_testbench();
         $finish();
     end
 endmodule
-

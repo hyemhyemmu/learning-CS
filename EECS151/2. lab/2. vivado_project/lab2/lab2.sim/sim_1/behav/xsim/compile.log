@@ -1,0 +1,6 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab2/src/counter.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module counter
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab2/src/z1top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module z1top
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/vivado_project/lab2/lab2.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
