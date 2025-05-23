@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/fpga_labs_fa22/lab1/src/z1top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module z1top
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/vivado_project/lab1/lab1.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
