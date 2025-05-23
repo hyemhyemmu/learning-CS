@@ -65,8 +65,8 @@ endmodule
 
 // 顶层组装模块
 module top_module(
-    input [7:0] SW // 8个开关输入 - 进入编码器
-    output [3:0] LED // 连接4个LED灯
+    input [7:0] SW, // 8个开关输入 - 进入编码器
+    output [3:0] LED, // 连接4个LED灯
     output [6:0] HEX // 连接7段数码管
  );
 
