@@ -8,7 +8,6 @@ module adder_testbench();
     reg [13:0] b;
     wire [14:0] sum;
 
-    // instance
     structural_adder sa (
         .a(a),
         .b(b),
@@ -20,6 +19,7 @@ module adder_testbench();
             $dumpfile("adder_testbench.fst");
             $dumpvars(0, adder_testbench);
         `endif
+
         `ifndef IVERILOG
             $vcdpluson;
         `endif
@@ -27,12 +27,18 @@ module adder_testbench();
         a = 14'd1;
         b = 14'd1;
         #(2);
-        assert(sum == 15'd2);
+        if (sum != 15'd2) begin
+            $display("ERROR: Expected sum to be 2, actual value: %d", sum);
+            $fatal(1);
+        end
 
         a = 14'd0; 
         b = 14'd1;
         #(2);
-        assert(sum == 15'd1) else $display("ERROR: Expected sum to be 1, actual value: %d", sum);
+        if (sum != 15'd1) begin
+            $display("ERROR: Expected sum to be 1, actual value: %d", sum);
+            $fatal(1);
+        end
 
         a = 14'd10;
         b = 14'd10;
@@ -45,6 +51,7 @@ module adder_testbench();
         `ifndef IVERILOG
             $vcdplusoff;
         `endif
+
         $finish();
     end
 endmodule

@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Fri May 23 03:02:06 2025
+# Process ID         : 2811660
+# Current directory  : /u/b/mofei3/Downloads/vivado_project/lab2/lab2.runs/synth_1
+# Command line       : vivado -log z1top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source z1top.tcl
+# Log file           : /u/b/mofei3/Downloads/vivado_project/lab2/lab2.runs/synth_1/z1top.vds
+# Journal file       : /u/b/mofei3/Downloads/vivado_project/lab2/lab2.runs/synth_1/vivado.jou
+# Running On         : remote.ecf.utoronto.ca
+# Platform           : AlmaLinux
+# Operating System   : AlmaLinux release 8.10 (Cerulean Leopard)
+# Processor Detail   : Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz
+# CPU Frequency      : 2100.000 MHz
+# CPU Physical cores : 40
+# CPU Logical cores  : 80
+# Host memory        : 810158 MB
+# Swap memory        : 1099511 MB
+# Total Virtual      : 1909669 MB
+# Available Virtual  : 1816258 MB
+#-----------------------------------------------------------
+source z1top.tcl -notrace

@@ -6,10 +6,10 @@ module structural_adder (
 
     wire [14:0] carry; 
     assign carry[0] = 1'b0;
-
+    
     genvar i;
     generate
-        for (i = 0; i < 14; i++) begin: adder_stage
+        for (i = 0; i < 14; i = i + 1) begin: adder_stage
             full_adder fa (
                 .a(a[i]),
                 .b(b[i]),
@@ -20,5 +20,5 @@ module structural_adder (
         end
     endgenerate
 
-    assign sum[14] = carry[14]
+    assign sum[14] = carry[14];
 endmodule
