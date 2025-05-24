@@ -11,11 +11,11 @@ module synchronizer #(parameter WIDTH = 1) (
 
     reg [WIDTH-1:0] ff1, ff2;
 
-    always @(posedge) begin
+    always @(posedge clk) begin
         ff1 <= async_signal;
-        ff2 <= ff1;'
+        ff2 <= ff1;
     end
 
-    assign sync_signal = async_signal;
+    assign sync_signal = ff2;
     
 endmodule
