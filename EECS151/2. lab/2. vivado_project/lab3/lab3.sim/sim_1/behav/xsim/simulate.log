@@ -1,0 +1,6 @@
+Time resolution is 1 ps
+DEBUG: Detected rising edge at time                   13
+DEBUG: Detected rising edge at time                   93
+Testbench finished, errors:          0
+$finish called at time : 197 ns : File "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/edge_detector_tb.v" Line 84
+INFO: xsimkernel Simulation Memory Usage: 486184 KB (Peak: 543456 KB), Simulation CPU Usage: 1470 ms

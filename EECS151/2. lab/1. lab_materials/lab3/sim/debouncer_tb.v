@@ -37,8 +37,8 @@ module debouncer_tb();
             end
         `endif
         `ifndef IVERILOG
-            $vcdpluson;
-            $vcdplusmemon;
+           // $vcdpluson;
+           // $vcdplusmemon;
         `endif
 
         glitchy_signal = 0;
@@ -68,7 +68,10 @@ module debouncer_tb();
         glitchy_signal[0] = 0;
         repeat (`SAMPLE_CNT_MAX * (`PULSE_CNT_MAX + 1)) @(posedge clk);
         #1;
-        assert(debounced_signal[0] == 0) else $display("1st debounced_signal didn't stay low");
+        if (debounced_signal[0] != 0) begin
+    $display("1st debounced_signal didn't stay low");
+    $error("Assertion failed!"); // ¿ÉÑ¡£ºÖÕÖ¹·ÂÕæ
+end
 
         test0_done = 1;
 
@@ -125,7 +128,7 @@ module debouncer_tb();
 
         $display("Done!");
         `ifndef IVERILOG
-            $vcdplusoff;
+           // $vcdplusoff;
         `endif
         $finish();
     end

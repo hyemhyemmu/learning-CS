@@ -1,0 +1,272 @@
+
+*** Running vivado
+    with args -log z1top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source z1top.tcl
+
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Fri May 23 20:53:51 2025
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source z1top.tcl -notrace
+Command: synth_design -top z1top -part xc7z010iclg225-1L
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z010i'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z010i'
+INFO: [Device 21-403] Loading part xc7z010iclg225-1L
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 7 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 3253899
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2118.340 ; gain = 425.832 ; free physical = 426797 ; free virtual = 1728007
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'z1top' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/z1top.v:3]
+INFO: [Synth 8-6157] synthesizing module 'button_parser' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/button_parser.v:2]
+	Parameter WIDTH bound to: 4 - type: integer 
+	Parameter SAMPLE_CNT_MAX bound to: 62500 - type: integer 
+	Parameter PULSE_CNT_MAX bound to: 200 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'synchronizer' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/synchronizer.v:1]
+	Parameter WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'synchronizer' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/synchronizer.v:1]
+INFO: [Synth 8-6157] synthesizing module 'debouncer' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/debouncer.v:1]
+	Parameter WIDTH bound to: 4 - type: integer 
+	Parameter SAMPLE_CNT_MAX bound to: 62500 - type: integer 
+	Parameter PULSE_CNT_MAX bound to: 200 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'debouncer' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/debouncer.v:1]
+INFO: [Synth 8-6157] synthesizing module 'edge_detector' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/edge_detector.v:1]
+	Parameter WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'edge_detector' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/edge_detector.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'button_parser' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/button_parser.v:2]
+INFO: [Synth 8-6157] synthesizing module 'counter' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/counter.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'counter' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/counter.v:1]
+INFO: [Synth 8-6157] synthesizing module 'dac' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/dac.v:1]
+	Parameter CYCLES_PER_WINDOW bound to: 1024 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'dac' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/dac.v:1]
+INFO: [Synth 8-6157] synthesizing module 'sq_wave_gen' [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/sq_wave_gen.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'sq_wave_gen' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/sq_wave_gen.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'z1top' (0#1) [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/z1top.v:3]
+WARNING: [Synth 8-3917] design z1top has port LEDS[5] driven by constant 1
+WARNING: [Synth 8-3917] design z1top has port LEDS[4] driven by constant 1
+WARNING: [Synth 8-7129] Port clk in module sq_wave_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port next_sample in module sq_wave_gen is either unconnected or has no load
+WARNING: [Synth 8-7129] Port clk in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[9] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[8] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[7] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[6] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[5] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[4] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[3] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[2] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[1] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port code[0] in module dac is either unconnected or has no load
+WARNING: [Synth 8-7129] Port buttons[2] in module counter is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SWITCHES[0] in module z1top is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 2190.309 ; gain = 497.801 ; free physical = 426711 ; free virtual = 1727923
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2205.152 ; gain = 512.645 ; free physical = 426702 ; free virtual = 1727914
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2205.152 ; gain = 512.645 ; free physical = 426702 ; free virtual = 1727914
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2205.152 ; gain = 0.000 ; free physical = 426702 ; free virtual = 1727914
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/z1top.xdc]
+Finished Parsing XDC File [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/z1top.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/z1top.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/z1top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/z1top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2350.902 ; gain = 0.000 ; free physical = 426655 ; free virtual = 1727868
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2350.902 ; gain = 0.000 ; free physical = 426655 ; free virtual = 1727868
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 2350.902 ; gain = 658.395 ; free physical = 427292 ; free virtual = 1727869
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z010iclg225-1L
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 2358.906 ; gain = 666.398 ; free physical = 427292 ; free virtual = 1727869
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 2358.906 ; gain = 666.398 ; free physical = 427293 ; free virtual = 1727869
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:14 . Memory (MB): peak = 2358.906 ; gain = 666.398 ; free physical = 427389 ; free virtual = 1727870
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   16 Bit       Adders := 1     
+	   2 Input    8 Bit       Adders := 4     
+	   2 Input    4 Bit       Adders := 1     
++---Registers : 
+	               16 Bit    Registers := 1     
+	                8 Bit    Registers := 4     
+	                4 Bit    Registers := 4     
+	                1 Bit    Registers := 1     
++---Muxes : 
+	   2 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 80 (col length:40)
+BRAMs: 120 (col length: RAMB18 40 RAMB36 20)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3917] design z1top has port LEDS[5] driven by constant 1
+WARNING: [Synth 8-3917] design z1top has port LEDS[4] driven by constant 1
+WARNING: [Synth 8-3917] design z1top has port AUD_PWM driven by constant 0
+WARNING: [Synth 8-7129] Port SWITCHES[0] in module z1top is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:16 . Memory (MB): peak = 2358.906 ; gain = 666.398 ; free physical = 428862 ; free virtual = 1727864
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2385.906 ; gain = 693.398 ; free physical = 429088 ; free virtual = 1727804
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2405.938 ; gain = 713.430 ; free physical = 429070 ; free virtual = 1727786
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:19 ; elapsed = 00:00:21 . Memory (MB): peak = 2405.938 ; gain = 713.430 ; free physical = 429070 ; free virtual = 1727786
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     1|
+|2     |CARRY4 |     4|
+|3     |LUT1   |     5|
+|4     |LUT2   |    10|
+|5     |LUT3   |     7|
+|6     |LUT4   |     8|
+|7     |LUT5   |     7|
+|8     |LUT6   |    14|
+|9     |FDRE   |    54|
+|10    |IBUF   |     5|
+|11    |OBUF   |     8|
++------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.750 ; gain = 866.242 ; free physical = 428924 ; free virtual = 1727642
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 5 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:21 ; elapsed = 00:00:24 . Memory (MB): peak = 2558.750 ; gain = 720.492 ; free physical = 428923 ; free virtual = 1727641
+Synthesis Optimization Complete : Time (s): cpu = 00:00:22 ; elapsed = 00:00:25 . Memory (MB): peak = 2558.758 ; gain = 866.242 ; free physical = 428922 ; free virtual = 1727639
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2558.758 ; gain = 0.000 ; free physical = 429087 ; free virtual = 1727808
+INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2614.777 ; gain = 0.000 ; free physical = 429065 ; free virtual = 1727806
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: 41fd6c51
+INFO: [Common 17-83] Releasing license: Synthesis
+31 Infos, 22 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:31 ; elapsed = 00:00:36 . Memory (MB): peak = 2614.777 ; gain = 1013.770 ; free physical = 429064 ; free virtual = 1727806
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 1556.366; main = 1528.718; forked = 277.121
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3911.973; main = 2614.781; forked = 1553.062
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2638.789 ; gain = 0.000 ; free physical = 429064 ; free virtual = 1727806
+INFO: [Common 17-1381] The checkpoint '/u/b/mofei3/Downloads/vivado_project/lab3/lab3.runs/synth_1/z1top.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file z1top_utilization_synth.rpt -pb z1top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri May 23 20:54:34 2025...

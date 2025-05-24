@@ -25,7 +25,7 @@ module sync_tb();
             $dumpvars(0, sync_tb);
         `endif
         `ifndef IVERILOG
-            $vcdpluson;
+            // $vcdpluson;
         `endif
 
         // We use fork-join to create 2 threads that operate in parallel
@@ -58,7 +58,7 @@ module sync_tb();
         $display("Test finished");
 
         `ifndef IVERILOG
-            $vcdplusoff;
+           // $vcdplusoff;
         `endif
         $finish();
     end

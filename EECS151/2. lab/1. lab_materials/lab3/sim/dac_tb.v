@@ -23,7 +23,7 @@ module dac_tb();
             $dumpvars(0, dac_tb);
         `endif
         `ifndef IVERILOG
-            $vcdpluson;
+            // $vcdpluson;
         `endif
 
         fork
@@ -117,7 +117,7 @@ module dac_tb();
         $display("Test finished");
 
         `ifndef IVERILOG
-            $vcdplusoff;
+            // $vcdplusoff;
         `endif
         $finish();
     end

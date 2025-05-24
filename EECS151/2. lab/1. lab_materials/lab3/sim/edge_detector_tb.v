@@ -29,7 +29,7 @@ module edge_detector_tb();
             $dumpvars(0, edge_detector_tb);
         `endif
         `ifndef IVERILOG
-            $vcdpluson;
+            // $vcdpluson;
         `endif
 
         fork
@@ -79,7 +79,7 @@ module edge_detector_tb();
         join
 
         `ifndef IVERILOG
-            $vcdplusoff;
+           // $vcdplusoff;
         `endif
         $finish();
     end

@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/edge_detector.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module edge_detector
+INFO: [VRFC 10-2263] Analyzing Verilog file "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/edge_detector_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module edge_detector_tb
