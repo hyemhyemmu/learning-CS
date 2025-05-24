@@ -23,15 +23,30 @@ end
 
 // always block for combinational logic
 always @(*) begin
-case(current_state)
-    IDLE    : begin
-      
-            end
-
-
-
-
-endcase
+  case(current_state)
+    IDLE: begin
+      out = 1'b0;
+      if (in) next_state = S1;
+      else next_state = S0;
+    end
+    
+    S0: begin
+      out = 1'b0;
+      if (in) next_state = S1;
+      else next_state = S0;
+    end
+    
+    S1: begin
+      out = 1'b1;
+      if (in) next_state = S1;
+      else next_state = S0;
+    end
+    
+    default: begin
+      out = 1'b0;
+      next_state = IDLE;
+    end
+  endcase
 end
 
 endmodule
