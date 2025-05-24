@@ -44,14 +44,15 @@ module counter_tb();
     // Helper task: verify counter value
     task check_counter;
         input [3:0] expected;
-        input string test_name;
+        input [255:0] test_name; // Use reg array instead of string
         begin
             test_count = test_count + 1;
             if (leds !== expected) begin
-                $error("Test %0d FAILED: %s - Expected: %b, Got: %b", 
+                $display("ERROR: Test %0d FAILED: %0s - Expected: %b, Got: %b", 
                        test_count, test_name, expected, leds);
+                $finish;
             end else begin
-                $display("Test %0d PASSED: %s - Counter value: %b", 
+                $display("Test %0d PASSED: %0s - Counter value: %b", 
                          test_count, test_name, leds);
             end
         end
@@ -218,7 +219,7 @@ module counter_tb();
     // Timeout protection
     initial begin
         #10000;
-        $error("Testbench timeout!");
+        $display("ERROR: Testbench timeout!");
         $finish;
     end
     

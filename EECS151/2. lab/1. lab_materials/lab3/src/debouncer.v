@@ -18,10 +18,10 @@ module debouncer #(
     reg [SAT_CNT_WIDTH-1:0] saturating_counter [WIDTH-1:0];
 
     // initialize counters
-    integer i
+    integer i;
     initial begin
         wrapping_counter = 0;
-        sampl_pulse = 0;
+        sample_pulse = 0;
         for (i=0 ; i < WIDTH ; i = i + 1) begin
             saturating_counter[i] = 0;
         end
@@ -42,7 +42,7 @@ module debouncer #(
             for (i = 0; i < WIDTH; i= i + 1) begin
                 if (glitchy_signal[i] == 1) begin
                     if (saturating_counter[i] < PULSE_CNT_MAX) begin
-                        saturating_counter[i] = saturating_counter[i] + 1;
+                        saturating_counter[i] <= saturating_counter[i] + 1;
                     end
                 end else begin
                   // input is 0, reset

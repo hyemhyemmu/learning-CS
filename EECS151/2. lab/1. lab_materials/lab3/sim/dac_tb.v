@@ -32,28 +32,46 @@ module dac_tb();
                 code = 0;
                 #1;
                 repeat (7) begin
-                    assert(pwm == 0) else $error("pwm should be 0 when code is 0");
+                    if (pwm != 0) begin
+                        $display("ERROR: pwm should be 0 when code is 0");
+                        $finish;
+                    end
                     @(posedge clk); #1;
                 end
-                assert(pwm == 0) else $error("pwm should be 0 when code is 0");
+                if (pwm != 0) begin
+                    $display("ERROR: pwm should be 0 when code is 0");
+                    $finish;
+                end
 
                 code = 7;
                 @(posedge clk); #1;
                 repeat (7) begin
-                    assert(pwm == 1) else $error("pwm should be 1 when code is 7");
+                    if (pwm != 1) begin
+                        $display("ERROR: pwm should be 1 when code is 7");
+                        $finish;
+                    end
                     @(posedge clk); #1;
                 end
-                assert(pwm == 1) else $error("pwm should be 1 when code is 7");
+                if (pwm != 1) begin
+                    $display("ERROR: pwm should be 1 when code is 7");
+                    $finish;
+                end
 
                 repeat (2) begin
                     code = 3;
                     repeat (4) begin
 						@(posedge clk); #1;
-		                assert(pwm == 1) else $error("pwm should be 1 on first half of code = 3");
+		                if (pwm != 1) begin
+                            $display("ERROR: pwm should be 1 on first half of code = 3");
+                            $finish;
+                        end
 					end
                     repeat (4) begin
 						@(posedge clk); #1;
-					assert(pwm == 0) else $error("pwm should be 0 on first half of code = 3");
+					    if (pwm != 0) begin
+                            $display("ERROR: pwm should be 0 on second half of code = 3");
+                            $finish;
+                        end
 					end
                 end
 
@@ -61,22 +79,37 @@ module dac_tb();
                     code = 2;
                     repeat (3) begin
 						@(posedge clk); #1;
-		                assert(pwm == 1) else $error("pwm should be 1 on first half of code = 3");
+		                if (pwm != 1) begin
+                            $display("ERROR: pwm should be 1 on first part of code = 2");
+                            $finish;
+                        end
 					end
                     repeat (5) begin
 						@(posedge clk); #1;
-					assert(pwm == 0) else $error("pwm should be 0 on first half of code = 3");
+					    if (pwm != 0) begin
+                            $display("ERROR: pwm should be 0 on second part of code = 2");
+                            $finish;
+                        end
 					end
                 end
             end
             // Thread to check next_sample
             begin
                 repeat (6) begin
-                    assert(next_sample == 0) else $error("next_sample should start at 0");
+                    if (next_sample != 0) begin
+                        $display("ERROR: next_sample should start at 0");
+                        $finish;
+                    end
                     repeat (7) @(posedge clk); #1;
-                    assert(next_sample == 1) else $error("next_sample should become 1 after 7 cycles");
+                    if (next_sample != 1) begin
+                        $display("ERROR: next_sample should become 1 after 7 cycles");
+                        $finish;
+                    end
                     @(posedge clk); #1;
-                    assert(next_sample == 0) else $error("next_sample should go back to 0 on the 8th cycle");
+                    if (next_sample != 0) begin
+                        $display("ERROR: next_sample should go back to 0 on the 8th cycle");
+                        $finish;
+                    end
                 end
             end
         join

@@ -46,8 +46,8 @@ module edge_detector_tb();
                 signal_in = 2'b00;
                 repeat (10) @(posedge clk); #1;
                 if (!done) begin
-                    $error("Testbench timeout");
-                    $fatal();
+                    $display("ERROR: Testbench timeout");
+                    $finish;
                 end
                 else begin
                     $display("Testbench finished, errors: %d", tests_failed);
@@ -63,7 +63,7 @@ module edge_detector_tb();
 
                 // Check that the edge detector output is now low
                 if (edge_detect_pulse[0] !== 1'b0) begin
-                    $error("Failure 1: Your edge detector's output wasn't 1 clock cycle wide");
+                    $display("ERROR: Failure 1: Your edge detector's output wasn't 1 clock cycle wide");
                     tests_failed = tests_failed + 1;
                 end
 
@@ -71,7 +71,7 @@ module edge_detector_tb();
                 @(posedge edge_detect_pulse[1]);
                 @(posedge clk); #1;
                 if (edge_detect_pulse[1] !== 1'b0) begin
-                    $error("Failure 2: Your edge detector's output wasn't 1 clock cycle wide");
+                    $display("ERROR: Failure 2: Your edge detector's output wasn't 1 clock cycle wide");
                     tests_failed = tests_failed + 1;
                 end
                 done = 1;
