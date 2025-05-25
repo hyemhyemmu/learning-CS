@@ -55,7 +55,7 @@ module sq_wave_gen_tb();
             begin
                 repeat (122000) begin
                     // Pull next_sample every X cycles where X is a random number in [2, 9]
-                    next_sample_fetch = ($urandom() % 8) + 2;
+                    next_sample_fetch = ({$random} % 8) + 2;
                     repeat (next_sample_fetch) @(posedge clk);
                     #1;
                     next_sample = 1;
