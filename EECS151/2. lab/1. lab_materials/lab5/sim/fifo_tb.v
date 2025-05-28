@@ -256,6 +256,104 @@ module fifo_tb();
 
     $display("All the basic tests passed!");
 
+    // ==================== Additional tests ==============================
+    // Test 1: Continuous write then read with no delays (typical I/O buffering usage)
+    $display("Starting continuous write/read test...");
+    
+    // First, fill the FIFO completely with no delays
+    for (i = 0; i < DEPTH; i = i + 1) begin
+      write_to_fifo(test_values[i], 1'b0);
+    end
+    
+    // Verify FIFO is full
+    if (full !== 1'b1 || empty === 1'b1) begin
+      $error("Failure: FIFO should be full after continuous writes. full = %b, empty = %b", full, empty);
+    end
+    
+    // Now read all data back with no delays
+    for (i = 0; i < DEPTH; i = i + 1) begin
+      read_from_fifo(1'b0, received_values[i]);
+    end
+    
+    // Verify FIFO is empty
+    if (full !== 1'b0 || empty !== 1'b1) begin
+      $error("Failure: FIFO should be empty after continuous reads. full = %b, empty = %b", full, empty);
+    end
+    
+    // Verify data integrity
+    num_mismatches = 0;
+    for (i = 0; i < DEPTH; i = i + 1) begin
+      if (test_values[i] !== received_values[i]) begin
+        $error("Failure: Continuous test - Data mismatch at entry %d, got %d, expected %d", i, received_values[i], test_values[i]);
+        num_mismatches = num_mismatches + 1;
+      end
+    end
+    if (num_mismatches > 0)
+      $fatal();
+    
+    $display("Continuous write/read test passed!");
+    
+    // Test 2: Simultaneous write and read on same cycle
+    $display("Starting simultaneous write/read test...");
+    
+    // Reset the FIFO to start fresh
+    rst = 1'b1;
+    @(posedge clk); #1;
+    rst = 1'b0;
+    @(posedge clk); #1;
+    
+    // Test simultaneous operations for multiple cycles
+    num_items = 20; // Test with 20 items
+    
+    fork
+      begin // Writer thread
+        for (i = 0; i < num_items; i = i + 1) begin
+          #1;
+          if (!full) begin
+            wr_en = 1'b1;
+            din = test_values[i];
+          end else begin
+            wr_en = 1'b0;
+          end
+          @(posedge clk);
+          wr_en = 1'b0;
+        end
+      end
+      begin // Reader thread
+        integer read_count = 0;
+        repeat (5) @(posedge clk); // Wait a bit before starting reads
+        
+        while (read_count < num_items) begin
+          #1;
+          if (!empty) begin
+            rd_en = 1'b1;
+            @(posedge clk); #1;
+            received_values[read_count] = dout;
+            read_count = read_count + 1;
+            rd_en = 1'b0;
+          end else begin
+            @(posedge clk);
+          end
+        end
+      end
+    join
+    
+    // Wait for any remaining operations to complete
+    repeat (10) @(posedge clk);
+    
+    // Verify data integrity for simultaneous test
+    num_mismatches = 0;
+    for (i = 0; i < num_items; i = i + 1) begin
+      if (test_values[i] !== received_values[i]) begin
+        $error("Failure: Simultaneous test - Data mismatch at entry %d, got %d, expected %d", i, received_values[i], test_values[i]);
+        num_mismatches = num_mismatches + 1;
+      end
+    end
+    if (num_mismatches > 0)
+      $fatal();
+    
+    $display("Simultaneous write/read test passed!");
+
     // ==================== Harder tests ==================================
     // Begin pushing data into the FIFO in successive cycles
     for (i = 0; i < DEPTH; i = i + 1) begin
