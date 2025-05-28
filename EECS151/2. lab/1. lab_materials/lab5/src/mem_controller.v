@@ -13,10 +13,10 @@ module mem_controller #(
   output [5:0] state_leds
 );
 
-  localparam MEM_WIDTH = 8;   /* Width of each mem entry (word) */
-  localparam MEM_DEPTH = 256; /* Number of entries */
-  localparam NUM_BYTES_PER_WORD = MEM_WIDTH/8;
-  localparam MEM_ADDR_WIDTH = $clog2(MEM_DEPTH); 
+  localparam MEM_WIDTH = 8;
+  localparam MEM_DEPTH = 256;
+  localparam NUM_BYTES_PER_WORD = MEM_WIDTH / 8;
+  localparam MEM_ADDR_WIDTH = $clog2(MEM_DEPTH);
 
   reg [NUM_BYTES_PER_WORD-1:0] mem_we = 0;
   reg [MEM_ADDR_WIDTH-1:0] mem_addr;
@@ -26,7 +26,7 @@ module mem_controller #(
   memory #(
     .MEM_WIDTH(MEM_WIDTH),
     .DEPTH(MEM_DEPTH)
-  ) mem(
+  ) mem (
     .clk(clk),
     .en(1'b1),
     .we(mem_we),
@@ -36,67 +36,147 @@ module mem_controller #(
   );
 
   localparam 
-    IDLE = 3'd0,
-    READ_CMD = 3'd1,
-    READ_ADDR = 3'd2,
-    READ_DATA = 3'd3,
-    READ_MEM_VAL = 3'd4,
-    ECHO_VAL = 3'd5,
-    WRITE_MEM_VAL = 3'd6;
+    IDLE            = 3'd0,
+    READ_CMD        = 3'd1,
+    READ_ADDR       = 3'd2,
+    READ_DATA       = 3'd3,
+    READ_MEM_VAL    = 3'd4,
+    ECHO_VAL        = 3'd5,
+    WRITE_MEM_VAL   = 3'd6;
 
   reg [2:0] curr_state;
   reg [2:0] next_state;
 
   always @(posedge clk) begin
-
-    /* state reg update */
-
+    if (rst)
+      curr_state <= IDLE;
+    else
+      curr_state <= next_state;
   end
 
   reg [2:0] pkt_rd_cnt;
   reg [MEM_WIDTH-1:0] cmd;
   reg [MEM_WIDTH-1:0] addr;
   reg [MEM_WIDTH-1:0] data;
-  reg handshake;
 
+  // Output regs
+  reg rx_fifo_rd_en_reg;
+  reg tx_fifo_wr_en_reg;
+  reg [FIFO_WIDTH-1:0] dout_reg;
 
+  // Connect regs to outputs
+  assign rx_fifo_rd_en = rx_fifo_rd_en_reg;
+  assign tx_fifo_wr_en = tx_fifo_wr_en_reg;
+  assign dout = dout_reg;
+
+  // State LED display
+  assign state_leds = 6'b1 << curr_state;
+
+  // State transition logic
   always @(*) begin
-    
-    /* initial values to avoid latch synthesis */
+    next_state = curr_state;
+
+    case (curr_state)
+      IDLE: begin
+        if (!rx_fifo_empty)
+          next_state = READ_CMD;
+      end
+
+      READ_CMD: begin
+        if (!rx_fifo_empty)
+          next_state = READ_ADDR;
+      end
+
+      READ_ADDR: begin
+        if (cmd == 8'd48) // '0' read
+          next_state = READ_MEM_VAL;
+        else if (cmd == 8'd49) // '1' write
+          next_state = READ_DATA;
+      end
+
+      READ_DATA: begin
+        if (!rx_fifo_empty)
+          next_state = WRITE_MEM_VAL;
+      end
+
+      WRITE_MEM_VAL: begin
+        next_state = IDLE;
+      end
+
+      READ_MEM_VAL: begin
+        next_state = ECHO_VAL;
+      end
+
+      ECHO_VAL: begin
+        if (!tx_fifo_full)
+          next_state = IDLE;
+      end
+    endcase
+  end
+
+  // Output & memory control logic
+  always @(*) begin
+    // default values
+    rx_fifo_rd_en_reg = 0;
+    tx_fifo_wr_en_reg = 0;
+    dout_reg = 8'd0;
+    mem_we = 0;
+    mem_din = 0;
+    mem_addr = 0;
 
     case (curr_state)
 
-      /* next state logic */
+      READ_CMD, READ_ADDR, READ_DATA: begin
+        rx_fifo_rd_en_reg = 1;
+      end
+
+      READ_MEM_VAL: begin
+        mem_addr = addr;
+      end
+
+      ECHO_VAL: begin
+        if (!tx_fifo_full) begin
+          dout_reg = mem_dout;
+          tx_fifo_wr_en_reg = 1;
+        end
+      end
+
+      WRITE_MEM_VAL: begin
+        mem_addr = addr;
+        mem_din = data;
+        mem_we = 1;
+      end
 
     endcase
-
   end
 
-  always @(*) begin
-    
-    /* initial values to avoid latch synthesis */
-    
-    case (curr_state)
-
-      /* output and mem signal logic */
-      
-    endcase
-
-  end
-
-
+  // Data capture
   always @(posedge clk) begin
+    if (rst) begin
+      pkt_rd_cnt <= 0;
+      cmd <= 0;
+      addr <= 0;
+      data <= 0;
+    end else begin
+      case (curr_state)
 
-    /* byte reading and packet counting */
+        READ_CMD: begin
+          if (!rx_fifo_empty)
+            cmd <= din;
+        end
 
+        READ_ADDR: begin
+          if (!rx_fifo_empty)
+            addr <= din;
+        end
+
+        READ_DATA: begin
+          if (!rx_fifo_empty)
+            data <= din;
+        end
+
+      endcase
+    end
   end
-
-  /* TODO: MODIFY THIS */
-  assign state_leds = 'd0;
-
-  /* TODO: MODIFY/REMOVE THIS */
-  assign rx_fifo_rd_en = 'd0;
-  assign tx_fifo_wr_en = 'd0;
-  assign dout = 'd0;
 
 endmodule
