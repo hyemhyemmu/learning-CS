@@ -1,0 +1,10 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../../../learning-CS/EECS151/2. lab/1. lab_materials/lab2/src/counter.v" \
+"../../../../../../learning-CS/EECS151/2. lab/1. lab_materials/lab2/src/z1top.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

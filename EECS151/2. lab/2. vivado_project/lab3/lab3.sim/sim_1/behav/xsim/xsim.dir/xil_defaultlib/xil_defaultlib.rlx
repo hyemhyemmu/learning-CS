@@ -1,0 +1,15 @@
+0.7
+2020.2
+Nov  8 2024
+22:36:55
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/counter_tb.v,1748046951,verilog,,,,counter_tb,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/dac_tb.v,1748048528,verilog,,,,dac_tb,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/debouncer_tb.v,1748048847,verilog,,,,debouncer_tb,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/edge_detector_tb.v,1748049009,verilog,,,,edge_detector_tb,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/sync_tb.v,1748047413,verilog,,,,sync_tb,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/counter.v,1748045989,verilog,,/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/counter_tb.v,,counter,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/dac.v,1748045989,verilog,,/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/dac_tb.v,,dac,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/debouncer.v,1748046951,verilog,,/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/debouncer_tb.v,,debouncer,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/edge_detector.v,1748045989,verilog,,/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/edge_detector_tb.v,,edge_detector,,,,,,,,
+/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/synchronizer.v,1748047077,verilog,,/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/sim/sync_tb.v,,synchronizer,,,,,,,,
+/u/b/mofei3/Downloads/vivado_project/lab3/lab3.sim/sim_1/behav/xsim/glbl.v,1724786425,verilog,,,,glbl,,,,,,,,

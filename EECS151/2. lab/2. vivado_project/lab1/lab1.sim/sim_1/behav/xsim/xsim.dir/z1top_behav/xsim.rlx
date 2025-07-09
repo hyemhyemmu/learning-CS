@@ -1,0 +1,12 @@
+
+{ 
+    crc :  6194989988343558848  , 
+    ccp_crc :  0  , 
+    cmdline : " --incr --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot z1top_behav xil_defaultlib.z1top xil_defaultlib.glbl" , 
+    buildDate : "Nov  8 2024" , 
+    buildTime : "22:36:55" , 
+    linkCmd : "/usr/bin/gcc -Wa,-W  -O -fPIC  -m64  -Wl,--no-as-needed  -Wl,--unresolved-symbols=ignore-all  -o \"xsim.dir/z1top_behav/xsimk\"   \"xsim.dir/z1top_behav/obj/xsim_0.lnx64.o\" \"xsim.dir/z1top_behav/obj/xsim_1.lnx64.o\" -L\"/u/b/mofei3/xilinx/Vivado/2024.2/lib/lnx64.o\" -lxv_simulator_kernel    -L/u/b/mofei3/xilinx/Vivado/2024.2/lib/lnx64.o/../../tps/lnx64/gcc-9.3.0/bin/../lib64 -Wl,--disable-new-dtags -Wl,-rpath=/u/b/mofei3/xilinx/Vivado/2024.2/lib/lnx64.o/../../tps/lnx64/gcc-9.3.0/bin/../lib64 -lxv_simbridge_kernel" , 
+    aggregate_nets : 
+    [ 
+    ] 
+} 

@@ -1,11 +1,11 @@
 // 一个简单的2状态FSM
-module 2stateFSM(
+module stateFSM(
   input clk,
   input rst,
   output reg[1:0] state
 );
 
-  parameter s0 = 2'b00, S1 = 2'b01;
+  parameter S0 = 2'b00, S1 = 2'b01;
 
   always @(posedge clk or posedge rst) begin
           if (rst) 

@@ -1,0 +1,17 @@
+Vivado Simulator v2024.2.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: /u/b/mofei3/Downloads/software/Vivado/2024.2/bin/unwrapped/lnx64.o/xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot edge_detector_tb_behav xil_defaultlib.edge_detector_tb xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4099] "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/edge_detector.v" Line 1. Module edge_detector(WIDTH=2) doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "/u/b/mofei3/Downloads/learning-CS/EECS151/2. lab/1. lab_materials/lab3/src/edge_detector.v" Line 1. Module edge_detector(WIDTH=2) doesn't have a timescale but at least one module in design has a timescale.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.edge_detector(WIDTH=2)
+Compiling module xil_defaultlib.edge_detector_tb
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot edge_detector_tb_behav
