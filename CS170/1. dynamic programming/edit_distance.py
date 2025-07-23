@@ -1,6 +1,8 @@
-# 求两个单词之间的最小修改距离
-
 def edit_distance(word1, word2):
+    """
+    求两个单词之间的最小修改距离，
+    时间复杂度O(mn)
+    """
     m = len(word1)
     n = len(word2)
     dp = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
