@@ -37,23 +37,24 @@ def knapsack_without_repetition(data, W):
     values = list(data.values())
     n = len(data)
     
-    # K[i][w] 表示前i个物品在容量w下的最大价值
-    K = [[0 for _ in range(W + 1)] for _ in range(n + 1)]
+    # K[w][j] 表示前j个物品在容量w下的最大价值
+    K = [[0 for _ in range(n + 1)] for _ in range(W + 1)]
     
     # dynamic programming
-    for i in range(1, n + 1):
-        for w in range(1, W + 1):
-            # 不选择第i个物品
-            K[i][w] = K[i-1][w]
-            
-            # 如果第i个物品重量不超过当前容量，考虑选择它
-            if weight[i-1] <= w:
-                K[i][w] = max(K[i][w], K[i-1][w - weight[i-1]] + values[i-1])
+    for w in range(1, W + 1):
+        for j in range(1, n + 1):
+            # K(w, j) = max{
+            #               K(w, j - 1), 不放这件物品  
+            #               K(w - w_j, j - 1) + v_j                
+            #               }
+            if weight[j-1] > w:  
+                K[w][j] = K[w][j - 1]
+            else:
+                K[w][j] = max(K[w][j - 1], K[w - weight[j-1]][j - 1] + values[j-1])  # 修正：索引和值的获取
     
-    return K[n][W]
+    return K[W][n]
 
-# 测试无重复背包问题
-print("\n无重复背包问题测试:")
+# test
 print(knapsack_without_repetition(data, 10))  # 应该输出46 (选择重量6+4的物品)
 print(knapsack_without_repetition(data, 6))   # 应该输出30 (选择一个重量6的物品)
 print(knapsack_without_repetition(data, 5))   # 应该输出23 (选择重量3+2的物品)
