@@ -1,4 +1,5 @@
 Rust/rustlings
 .vscode/
+.idea/
 target/
 Cargo.lock
